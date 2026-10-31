@@ -28,6 +28,8 @@ def handle_voice_analysis():
 
     try:
         result = analyze_voice(temp_path)
+        if result.get("status") == "warning":
+            return jsonify(result), 400
         return jsonify(result), 200
     finally:
         # Privacy conscious default: Remove raw audio file immediately after processing

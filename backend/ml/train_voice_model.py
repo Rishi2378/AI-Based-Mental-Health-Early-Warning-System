@@ -54,9 +54,9 @@ def train_voice_emotion_model():
     X_test_scaled = scaler.transform(X_test)
 
     # Base models for Soft-Voting Ensemble
-    et_clf = ExtraTreesClassifier(n_estimators=180, max_depth=14, random_state=42)
-    rf_clf = RandomForestClassifier(n_estimators=180, max_depth=12, random_state=42)
-    gb_clf = GradientBoostingClassifier(n_estimators=120, learning_rate=0.08, max_depth=4, random_state=42)
+    et_clf = ExtraTreesClassifier(n_estimators=180, max_depth=16, random_state=42)
+    rf_clf = RandomForestClassifier(n_estimators=180, max_depth=14, random_state=42)
+    gb_clf = GradientBoostingClassifier(n_estimators=140, learning_rate=0.08, max_depth=4, random_state=42)
 
     et_clf.fit(X_train_scaled, y_emo_train)
     rf_clf.fit(X_train_scaled, y_emo_train)
@@ -69,8 +69,8 @@ def train_voice_emotion_model():
 
     # Voice Stress Regressor
     regressor = GradientBoostingRegressor(
-        n_estimators=130,
-        learning_rate=0.07,
+        n_estimators=140,
+        learning_rate=0.06,
         max_depth=4,
         loss='huber',
         random_state=42
@@ -98,13 +98,9 @@ def train_voice_emotion_model():
     print("ENHANCED ACOUSTIC SPEECH EMOTION ENSEMBLE MODEL")
     print("==================================================")
     print(f"Dataset Total Samples: {len(df)}")
-    print(f"Acoustic Features:     {X.shape[1]} parameters")
     print(f"Test Accuracy:         {acc * 100:.2f}%")
-    print(f"5-Fold CV Accuracy:    {cv_scores.mean() * 100:.2f}% (±{cv_scores.std()*100:.2f}%)")
+    print(f"5-Fold CV Accuracy:    {cv_scores.mean() * 100:.2f}% (+/- {cv_scores.std()*100:.2f}%)")
     print(f"Weighted F1-Score:     {f1 * 100:.2f}%")
-    print("\nTop 5 Acoustic Drivers:")
-    for fname, val in list(feature_importance_dict.items())[:5]:
-        print(f" - {fname}: {val * 100:.1f}% impact")
     print("\nClassification Report:")
     print(classification_report(y_emo_test, y_emo_pred, zero_division=0))
 
@@ -120,13 +116,15 @@ def train_voice_emotion_model():
             "precision": round(float(prec), 4),
             "recall": round(float(rec), 4),
             "f1": round(float(f1), 4),
-            "confusion_matrix": cm.tolist()
+            "total_samples": len(df),
+            "feature_count": X.shape[1],
+            "classes": ensemble_clf.classes_.tolist()
         }
     }
 
     os.makedirs(os.path.dirname(model_save_path), exist_ok=True)
     joblib.dump(model_artifacts, model_save_path)
-    print(f"[Model Saved] Voice acoustic ensemble model saved to: {model_save_path}")
+    print(f"[Model Saved] Successfully saved voice model to: '{model_save_path}'")
     return model_artifacts
 
 if __name__ == "__main__":

@@ -30,12 +30,12 @@ def train_text_nlp_model():
         X, y_emotion, y_stress, test_size=0.2, random_state=42, stratify=y_emotion
     )
 
-    # High-granularity TF-IDF Vectorizer (word n-grams 1 to 3, sublinear scaling)
+    # Enhanced TF-IDF Vectorizer (word n-grams 1 to 3 with lower min_df to capture affective cues)
     vectorizer = TfidfVectorizer(
         ngram_range=(1, 3),
-        max_features=3500,
+        max_features=5000,
         sublinear_tf=True,
-        min_df=2,
+        min_df=1,
         strip_accents='unicode',
         stop_words='english'
     )
@@ -43,10 +43,14 @@ def train_text_nlp_model():
     X_test_vec = vectorizer.transform(X_test)
 
     # Base models for Soft-Voting Ensemble
-    clf_lr = LogisticRegression(C=2.5, max_iter=800, class_weight='balanced', random_state=42)
-    clf_svc = CalibratedClassifierCV(LinearSVC(C=1.2, dual=False, class_weight='balanced', random_state=42))
-    clf_mlp = MLPClassifier(hidden_layer_sizes=(128, 64), max_iter=450, early_stopping=True, random_state=42)
-    clf_et = ExtraTreesClassifier(n_estimators=120, max_depth=20, random_state=42)
+    # L2 regularized Logistic Regression with balanced weights
+    clf_lr = LogisticRegression(C=3.0, max_iter=1000, class_weight='balanced', random_state=42)
+    # Calibrated Linear Support Vector Machine
+    clf_svc = CalibratedClassifierCV(LinearSVC(C=1.5, dual=False, class_weight='balanced', random_state=42))
+    # Multi-Layer Perceptron Neural Net
+    clf_mlp = MLPClassifier(hidden_layer_sizes=(128, 64), max_iter=500, early_stopping=True, random_state=42)
+    # ExtraTrees Classifier with deeper trees for robust bag-of-words voting
+    clf_et = ExtraTreesClassifier(n_estimators=150, max_depth=None, min_samples_split=3, random_state=42)
 
     ensemble_clf = VotingClassifier(
         estimators=[
@@ -61,8 +65,8 @@ def train_text_nlp_model():
 
     # Gradient Boosting Stress Indicator Regressor
     regressor = GradientBoostingRegressor(
-        n_estimators=140,
-        learning_rate=0.07,
+        n_estimators=160,
+        learning_rate=0.06,
         max_depth=4,
         loss='huber',
         random_state=42
@@ -84,7 +88,7 @@ def train_text_nlp_model():
     print(f"Dataset Total Samples: {len(df)}")
     print(f"Vocabulary Features:   {len(vectorizer.get_feature_names_out())} n-grams")
     print(f"Test Accuracy:         {acc * 100:.2f}%")
-    print(f"5-Fold CV Accuracy:    {cv_scores.mean() * 100:.2f}% (±{cv_scores.std()*100:.2f}%)")
+    print(f"5-Fold CV Accuracy:    {cv_scores.mean() * 100:.2f}% (+/- {cv_scores.std()*100:.2f}%)")
     print(f"Weighted F1-Score:     {f1 * 100:.2f}%")
     print("\nClassification Report:")
     print(classification_report(y_emo_test, y_emo_pred, zero_division=0))
@@ -100,13 +104,15 @@ def train_text_nlp_model():
             "precision": round(float(prec), 4),
             "recall": round(float(rec), 4),
             "f1": round(float(f1), 4),
-            "confusion_matrix": cm.tolist()
+            "total_samples": len(df),
+            "vocabulary_size": len(vectorizer.get_feature_names_out()),
+            "classes": ensemble_clf.classes_.tolist()
         }
     }
 
     os.makedirs(os.path.dirname(model_save_path), exist_ok=True)
     joblib.dump(model_artifacts, model_save_path)
-    print(f"[Model Saved] Upgraded NLP Ensemble saved to: {model_save_path}")
+    print(f"[Model Saved] Successfully saved text model to: '{model_save_path}'")
     return model_artifacts
 
 if __name__ == "__main__":
