@@ -1,0 +1,50 @@
+# Python & Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+backend/venv/
+backend/env/
+
+# Flask & SQLite Database files
+*.db
+*.sqlite
+*.sqlite3
+backend/database/*.db
+backend/instance/
+instance/
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Environment and sensitive keys
+.env
+.env.local
+.env.*.local
+
+# Node & Frontend dependencies and builds
+node_modules/
+frontend/node_modules/
+frontend/dist/
+dist/
+.npm
+package-lock.json
+frontend/.package-lock.json
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs & OS artifacts
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE configs
+.vscode/
+.idea/

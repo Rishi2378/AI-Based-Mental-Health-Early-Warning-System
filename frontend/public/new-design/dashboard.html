@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>MindGuard AI - Longitudinal Health Dashboard &amp; Model Diagnostics</title>
+  <link rel="icon" type="image/svg+xml" href="/shield.svg"/>
+  
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  
+  <style>
+    html, body { margin:0; padding:0; }
+    body { overscroll-behavior: none; }
+    ::-webkit-scrollbar { display:none; }
+
+    .vision-glass {
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+    }
+    .dark .vision-glass {
+      background: rgba(18, 21, 31, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+    }
+    html:not(.dark) .vision-glass {
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03), inset 0 1px 1px rgba(255, 255, 255, 0.95);
+    }
+
+    .vision-glass-subtle {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    .dark .vision-glass-subtle {
+      background: rgba(24, 28, 42, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09);
+    }
+    html:not(.dark) .vision-glass-subtle {
+      background: rgba(243, 246, 252, 0.82);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    }
+  </style>
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: {
+            manrope: ["Manrope", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-[#0c0e15] font-manrope text-slate-100 min-h-screen relative overflow-x-hidden selection:bg-cyan-400 selection:text-slate-950 transition-colors duration-300">
+  <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+    <div class="absolute -top-[15%] -left-[10%] w-[55vw] h-[55vw] rounded-full bg-[radial-gradient(circle,rgba(0,245,255,0.08)_0%,transparent_70%)] blur-3xl"></div>
+    <div class="absolute top-[35%] -right-[15%] w-[60vw] h-[60vw] rounded-full bg-[radial-gradient(circle,rgba(147,51,234,0.09)_0%,transparent_70%)] blur-3xl"></div>
+    <div class="absolute -bottom-[20%] left-[20%] w-[50vw] h-[50vw] rounded-full bg-[radial-gradient(circle,rgba(0,220,229,0.06)_0%,transparent_70%)] blur-3xl"></div>
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="fixed top-0 inset-x-0 h-16 z-50 vision-glass border-b border-white/10 shadow-lg">
+    <div class="w-full h-16 px-6 lg:px-12 flex items-center justify-between gap-4">
+      <a href="/index.html" class="flex items-center gap-3 shrink-0">
+        <div class="relative flex items-center justify-center w-9 h-9 rounded-xl bg-cyan-400/20 border border-white/20 shadow-inner">
+          <span class="material-symbols-outlined text-cyan-400 text-xl">shield_with_heart</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-manrope text-base text-slate-100 font-bold tracking-tight leading-none">MindGuard AI</span>
+          <span class="font-mono text-[10px] text-cyan-400 uppercase tracking-wider mt-0.5 font-semibold">v2.4 Multimodal Neural</span>
+        </div>
+      </a>
+
+      <nav class="hidden xl:flex items-center gap-1 px-1 py-1 rounded-full bg-white/5 border border-white/10">
+        <a class="px-3.5 py-1.5 rounded-full text-xs text-slate-400 hover:text-white transition-all" href="/index.html">Overview</a>
+        <a class="px-3.5 py-1.5 rounded-full text-xs text-slate-400 hover:text-white transition-all" href="/assessment.html">Assessment Wizard</a>
+        <a class="px-3.5 py-1.5 rounded-full text-xs text-slate-400 hover:text-white transition-all" href="/voice.html">Voice Lab</a>
+        <a aria-current="page" class="px-3.5 py-1.5 rounded-full text-xs transition-all bg-white/15 text-cyan-400 font-semibold shadow-sm" href="/dashboard.html">Dashboard</a>
+      </nav>
+
+      <div class="flex items-center gap-3 shrink-0">
+        <div class="relative flex items-center p-1 rounded-full bg-white/5 border border-white/10" id="theme-toggle-container">
+          <div class="absolute top-1 bottom-1 w-7 rounded-full bg-white/15 shadow-sm transition-transform duration-300 ease-out" id="theme-pill" style="left: 4px; transform: translateX(28px);"></div>
+          <button aria-label="Switch to light theme" class="relative z-10 w-7 h-7 flex items-center justify-center rounded-full text-amber-500 transition-colors" id="theme-light-btn" type="button">
+            <span class="material-symbols-outlined text-[17px]">light_mode</span>
+          </button>
+          <button aria-label="Switch to dark theme" class="relative z-10 w-7 h-7 flex items-center justify-center rounded-full text-cyan-400 transition-colors" id="theme-dark-btn" type="button">
+            <span class="material-symbols-outlined text-[17px]">dark_mode</span>
+          </button>
+        </div>
+
+        <a class="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-400 to-teal-400 text-slate-950 font-manrope text-xs font-semibold tracking-wide shadow-[0_0_20px_rgba(0,245,255,0.35)] hover:shadow-[0_0_28px_rgba(0,245,255,0.55)] transition-all" href="/assessment.html">
+          <span class="material-symbols-outlined text-base">add_chart</span>
+          <span class="hidden md:inline">New Assessment</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Left Sidebar -->
+  <aside class="fixed left-0 top-0 h-full w-64 vision-glass border-r border-white/10 z-40 flex flex-col pt-20 pb-6 shadow-xl">
+    <div class="px-6 py-2 mb-2">
+      <span class="font-mono text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Neural Streams</span>
+    </div>
+    <nav class="flex-1 px-3 space-y-1 overflow-y-auto">
+      <a class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all" href="/index.html">
+        <span class="material-symbols-outlined text-xl text-cyan-400">explore</span>
+        <span class="text-sm">Overview</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all" href="/assessment.html">
+        <span class="material-symbols-outlined text-xl text-cyan-400">auto_awesome</span>
+        <span class="text-sm">Assessment Wizard</span>
+      </a>
+      <a class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all" href="/voice.html">
+        <span class="material-symbols-outlined text-xl text-cyan-400">graphic_eq</span>
+        <span class="text-sm">Voice Acoustic Lab</span>
+      </a>
+      <a aria-current="page" class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all bg-white/10 text-cyan-400 font-semibold border border-cyan-400/20" href="/dashboard.html">
+        <span class="material-symbols-outlined text-xl text-cyan-400">space_dashboard</span>
+        <span class="text-sm">Dashboard &amp; History</span>
+      </a>
+    </nav>
+    <div class="px-3 pt-3 mt-auto">
+      <div class="p-1 rounded-2xl vision-glass-subtle">
+        <a class="group flex flex-col gap-1 p-3 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 transition-all" href="tel:988">
+          <div class="flex items-center gap-2">
+            <span class="relative flex h-2.5 w-2.5">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-500 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
+            </span>
+            <span class="text-xs font-bold text-rose-400 tracking-wide">988 Lifeline</span>
+          </div>
+          <p class="font-mono text-[10px] text-slate-400 leading-tight">24/7 Free &amp; Confidential Support</p>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Zone -->
+  <div class="pl-64">
+    <main class="relative w-full pt-16 min-h-screen px-6 lg:px-12 pb-20 z-10">
+      <div class="flex flex-col w-full gap-6 mt-6">
+        <!-- Top Telemetry Header Bar -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-2xl vision-glass relative overflow-hidden">
+          <div class="flex items-center gap-4 min-w-0 z-10">
+            <div class="w-14 h-14 rounded-2xl bg-cyan-400/20 border border-white/10 flex items-center justify-center shrink-0 shadow-md">
+              <span class="material-symbols-outlined text-3xl text-cyan-400">insights</span>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-2xl text-slate-100 font-bold">Longitudinal Wellness Dashboard</span>
+                <span class="px-3 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 font-mono text-xs font-bold border border-cyan-500/20">SQLITE STORAGE</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-0.5 font-medium">Aggregated longitudinal trends, late-fusion session history, and neural model evaluation metrics.</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3 shrink-0 z-10">
+            <button onclick="refreshDashboardData()" class="flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-200 text-xs font-mono border border-white/10 transition-all">
+              <span class="material-symbols-outlined text-base text-cyan-400" id="refresh-icon">refresh</span>
+              <span>Refresh</span>
+            </button>
+            <button onclick="confirmClearHistory()" class="flex items-center gap-1.5 px-4 py-2 rounded-full bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-xs font-mono border border-rose-500/20 transition-all">
+              <span class="material-symbols-outlined text-base">delete_sweep</span>
+              <span>Clear History</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Telemetry Metrics Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="p-5 rounded-2xl vision-glass flex flex-col justify-between">
+            <span class="font-mono text-xs text-slate-400 uppercase tracking-wider font-semibold">Total Assessments</span>
+            <div class="my-2 flex items-baseline gap-2">
+              <span class="font-manrope text-3xl font-extrabold text-cyan-400" id="dash-total-count">0</span>
+              <span class="text-xs text-slate-400 font-medium">Recorded Sessions</span>
+            </div>
+            <span class="font-mono text-[11px] text-slate-400">Multimodal late fusion records</span>
+          </div>
+
+          <div class="p-5 rounded-2xl vision-glass flex flex-col justify-between">
+            <span class="font-mono text-xs text-slate-400 uppercase tracking-wider font-semibold">Latest Health Index</span>
+            <div class="my-2 flex items-baseline gap-2">
+              <span class="font-manrope text-3xl font-extrabold text-slate-100" id="dash-latest-score">--</span>
+              <span class="text-xs text-slate-400 font-medium">/ 100 Stress</span>
+            </div>
+            <span class="font-mono text-[11px] text-emerald-400" id="dash-latest-cat">No Active Baseline</span>
+          </div>
+
+          <div class="p-5 rounded-2xl vision-glass flex flex-col justify-between">
+            <span class="font-mono text-xs text-slate-400 uppercase tracking-wider font-semibold">NLP Ensemble Acc</span>
+            <div class="my-2 flex items-baseline gap-2">
+              <span class="font-manrope text-3xl font-extrabold text-purple-400" id="dash-text-acc">100%</span>
+              <span class="text-xs text-slate-400 font-medium">DistilRoBERTa + TF-IDF</span>
+            </div>
+            <span class="font-mono text-[11px] text-slate-400">Validated In-Domain Benchmark</span>
+          </div>
+
+          <div class="p-5 rounded-2xl vision-glass flex flex-col justify-between">
+            <span class="font-mono text-xs text-slate-400 uppercase tracking-wider font-semibold">Voice Model Acc</span>
+            <div class="my-2 flex items-baseline gap-2">
+              <span class="font-manrope text-3xl font-extrabold text-teal-400" id="dash-voice-acc">99.1%</span>
+              <span class="text-xs text-slate-400 font-medium">Biometric Classifier</span>
+            </div>
+            <span class="font-mono text-[11px] text-slate-400">Acoustic F0 &amp; Spectral MFCC</span>
+          </div>
+        </div>
+
+        <!-- Longitudinal Trend Chart Card -->
+        <div class="p-6 rounded-2xl vision-glass flex flex-col gap-4 relative overflow-hidden">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="font-mono text-xs text-cyan-400 uppercase tracking-widest font-bold">Longitudinal Trajectory</span>
+              <h3 class="font-manrope text-xl text-slate-100 font-bold">Multimodal Stress Trend Over Time</h3>
+            </div>
+            <div class="flex items-center gap-3 font-mono text-xs">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+                <span class="text-slate-300">Overall Fused</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-purple-400"></span>
+                <span class="text-slate-300">Voice</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-teal-400"></span>
+                <span class="text-slate-300">Text</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic SVG Trend Visualizer -->
+          <div class="w-full h-56 rounded-xl bg-slate-950/70 border border-white/10 p-4 flex items-center justify-center relative overflow-hidden" id="trend-chart-container">
+            <svg class="w-full h-full text-cyan-400" id="trend-svg" viewbox="0 0 600 160" preserveaspectratio="none">
+              <!-- Grid lines -->
+              <line x1="0" y1="40" x2="600" y2="40" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4"/>
+              <line x1="0" y1="80" x2="600" y2="80" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4"/>
+              <line x1="0" y1="120" x2="600" y2="120" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4"/>
+              <!-- Area -->
+              <polygon id="trend-area" points="0,150 150,110 300,90 450,60 600,45 600,160 0,160" fill="rgba(6,182,212,0.1)"></polygon>
+              <!-- Line -->
+              <path id="trend-line" d="M0,150 Q75,130 150,110 T300,90 T450,60 T600,45" fill="none" stroke="#00f5ff" stroke-width="3"></path>
+            </svg>
+            <div class="absolute inset-0 flex items-center justify-center text-slate-500 font-mono text-xs hidden" id="no-trend-notice">
+              Perform multiple assessments in the wizard to populate your longitudinal graph.
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Assessments Table Card -->
+        <div class="p-6 rounded-2xl vision-glass flex flex-col gap-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="font-mono text-xs text-cyan-400 uppercase tracking-widest font-bold">Historical Record Ledger</span>
+              <h3 class="font-manrope text-xl text-slate-100 font-bold">Recent Assessments</h3>
+            </div>
+            <a href="/assessment.html" class="px-4 py-2 rounded-full bg-cyan-400 text-slate-950 font-manrope text-xs font-bold hover:bg-cyan-300 transition-all">
+              + Launch Assessment
+            </a>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left font-manrope text-xs">
+              <thead class="border-b border-white/10 text-slate-400 font-mono text-[11px] uppercase">
+                <tr>
+                  <th class="py-3 px-4">ID</th>
+                  <th class="py-3 px-4">Date &amp; Time</th>
+                  <th class="py-3 px-4">Overall Score</th>
+                  <th class="py-3 px-4">Distress Level</th>
+                  <th class="py-3 px-4">Text Emotion</th>
+                  <th class="py-3 px-4">Voice Emotion</th>
+                  <th class="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5 text-slate-200" id="assessments-table-body">
+                <tr>
+                  <td colspan="7" class="py-8 text-center text-slate-400 font-mono">Loading assessments ledger from backend...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Retrain Models & System Diagnostics Card -->
+        <div class="p-6 rounded-2xl vision-glass flex flex-col md:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center">
+              <span class="material-symbols-outlined text-xl">precision_manufacturing</span>
+            </div>
+            <div>
+              <h4 class="font-manrope font-bold text-sm text-slate-100">Model Pipeline Calibration</h4>
+              <p class="font-manrope text-xs text-slate-400">Trigger background retraining and cross-validation across all datasets.</p>
+            </div>
+          </div>
+          <button onclick="triggerModelRetraining()" class="px-5 py-2.5 rounded-full bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 font-mono text-xs font-bold border border-purple-500/30 transition-all flex items-center gap-2" id="retrain-btn">
+            <span class="material-symbols-outlined text-base">restart_alt</span>
+            <span id="retrain-btn-text">Retrain Neural Models</span>
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="/new-design/mindguard-core.js"></script>
+  <script>
+    async function refreshDashboardData() {
+      const refreshIcon = document.getElementById('refresh-icon');
+      if (refreshIcon) refreshIcon.classList.add('animate-spin');
+
+      try {
+        const data = await MindGuardAPI.getDashboard();
+        
+        document.getElementById('dash-total-count').textContent = data.total_assessments || 0;
+        
+        if (data.current_indicator) {
+          document.getElementById('dash-latest-score').textContent = Math.round(data.current_indicator.score);
+          const catEl = document.getElementById('dash-latest-cat');
+          catEl.textContent = `${data.current_indicator.category} DISTRESS LEVEL`;
+          if (data.current_indicator.category === 'ELEVATED') {
+            catEl.className = 'font-mono text-[11px] text-rose-400 font-bold';
+          } else if (data.current_indicator.category === 'MODERATE') {
+            catEl.className = 'font-mono text-[11px] text-amber-400 font-bold';
+          } else {
+            catEl.className = 'font-mono text-[11px] text-emerald-400 font-bold';
+          }
+        }
+
+        renderTrendData(data.trend_data || []);
+        renderAssessmentsTable(data.recent_assessments || []);
+
+        showToast("Dashboard synchronized with MindGuard backend.", "success");
+      } catch (err) {
+        showToast(err.message || "Failed to load dashboard metrics.", "error");
+      } finally {
+        if (refreshIcon) refreshIcon.classList.remove('animate-spin');
+      }
+    }
+
+    function renderTrendData(trend) {
+      const notice = document.getElementById('no-trend-notice');
+      const area = document.getElementById('trend-area');
+      const line = document.getElementById('trend-line');
+
+      if (!trend || trend.length === 0) {
+        if (notice) notice.classList.remove('hidden');
+        return;
+      }
+      if (notice) notice.classList.add('hidden');
+
+      const width = 600;
+      const height = 160;
+      const step = trend.length > 1 ? width / (trend.length - 1) : width;
+
+      const points = trend.map((t, idx) => {
+        const x = Math.round(idx * step);
+        const y = Math.round(height - ((t.overall / 100) * (height - 20)) - 10);
+        return { x, y };
+      });
+
+      const pathStr = 'M' + points.map((p, i) => `${p.x},${p.y}`).join(' L');
+      const areaStr = `0,${height} ` + points.map(p => `${p.x},${p.y}`).join(' ') + ` ${width},${height}`;
+
+      line.setAttribute('d', pathStr);
+      area.setAttribute('points', areaStr);
+    }
+
+    function renderAssessmentsTable(assessments) {
+      const tbody = document.getElementById('assessments-table-body');
+      if (!assessments || assessments.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="py-8 text-center text-slate-500 font-mono">No historical assessments recorded yet. Run a test in the Assessment Wizard!</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = assessments.map(a => {
+        const score = Math.round(a.overall_score || 0);
+        const cat = a.category || 'LOW';
+        let badgeClass = 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20';
+        if (cat === 'ELEVATED') badgeClass = 'bg-rose-500/10 text-rose-300 border-rose-500/20';
+        if (cat === 'MODERATE') badgeClass = 'bg-amber-500/10 text-amber-300 border-amber-500/20';
+
+        const textEmo = a.text_result?.emotion || '--';
+        const voiceEmo = a.voice_result?.emotion || '--';
+        const dateStr = a.created_at ? new Date(a.created_at).toLocaleString() : 'Recent';
+
+        return `
+          <tr class="hover:bg-white/[0.03] transition-colors">
+            <td class="py-3 px-4 font-mono font-bold text-cyan-400">#${a.id}</td>
+            <td class="py-3 px-4 text-slate-300">${dateStr}</td>
+            <td class="py-3 px-4 font-mono font-bold">${score}%</td>
+            <td class="py-3 px-4">
+              <span class="px-2.5 py-0.5 rounded-full border font-mono text-[10px] font-bold ${badgeClass}">
+                ${cat}
+              </span>
+            </td>
+            <td class="py-3 px-4 text-slate-300">${textEmo}</td>
+            <td class="py-3 px-4 text-slate-300">${voiceEmo}</td>
+            <td class="py-3 px-4 text-right">
+              <button onclick="deleteAssessmentRecord(${a.id})" class="text-rose-400 hover:text-rose-300 font-mono text-xs flex items-center gap-1 ml-auto">
+                <span class="material-symbols-outlined text-sm">delete</span> Delete
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    async function deleteAssessmentRecord(id) {
+      if (!confirm(`Are you sure you want to delete assessment record #${id}?`)) return;
+      try {
+        await MindGuardAPI.deleteAssessment(id);
+        showToast(`Assessment #${id} deleted.`, "success");
+        refreshDashboardData();
+      } catch (err) {
+        showToast(err.message || "Failed to delete record.", "error");
+      }
+    }
+
+    async function confirmClearHistory() {
+      if (!confirm("Are you sure you want to delete ALL historical assessments? This action cannot be undone.")) return;
+      try {
+        await MindGuardAPI.clearHistory();
+        showToast("Historical ledger cleared.", "success");
+        refreshDashboardData();
+      } catch (err) {
+        showToast(err.message || "Failed to clear history.", "error");
+      }
+    }
+
+    async function triggerModelRetraining() {
+      const btn = document.getElementById('retrain-btn');
+      const text = document.getElementById('retrain-btn-text');
+      btn.disabled = true;
+      text.textContent = 'Retraining Pipeline...';
+
+      try {
+        const res = await MindGuardAPI.retrainModels();
+        showToast(res.message || "Models retrained successfully.", "success");
+        refreshDashboardData();
+      } catch (err) {
+        showToast(err.message || "Retraining failed.", "error");
+      } finally {
+        btn.disabled = false;
+        text.textContent = 'Retrain Neural Models';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      refreshDashboardData();
+    });
+  </script>
+</body>
+</html>

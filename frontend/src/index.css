@@ -1,0 +1,239 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   Apple Vision Pro & Antigravity Dual-Theme Spatial Design Tokens
+   ========================================================================== */
+
+:root, html.dark {
+  --bg-base: #07090e;
+  --bg-subtle: #0d111a;
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --text-faint: #64748b;
+  --glass-panel: rgba(18, 24, 38, 0.65);
+  --glass-panel-subtle: rgba(14, 19, 32, 0.6);
+  --glass-inner-well: rgba(8, 12, 20, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border-specular: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.04) 50%, rgba(0, 245, 255, 0.15) 100%);
+  --glass-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.7), 0 0 1px 1px rgba(255, 255, 255, 0.08) inset;
+  --glass-bevel: inset 0 1px 0 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 0 rgba(0, 0, 0, 0.5);
+  --nav-glass: rgba(8, 11, 18, 0.82);
+  --accent-cyan: #00f5ff;
+  --accent-violet: #a855f7;
+  --orb-opacity: 0.65;
+}
+
+html.light {
+  --bg-base: #f4f7fb;
+  --bg-subtle: #e6edf7;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-faint: #94a3b8;
+  --glass-panel: rgba(255, 255, 255, 0.78);
+  --glass-panel-subtle: rgba(255, 255, 255, 0.65);
+  --glass-inner-well: rgba(241, 245, 252, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.85);
+  --glass-border-specular: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.45) 50%, rgba(0, 210, 255, 0.3) 100%);
+  --glass-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(15, 23, 42, 0.04), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+  --glass-bevel: inset 0 1.5px 0 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 0 rgba(15, 23, 42, 0.04);
+  --nav-glass: rgba(255, 255, 255, 0.82);
+  --accent-cyan: #0088aa;
+  --accent-violet: #7c3aed;
+  --orb-opacity: 0.85;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    transition: background-color 0.35s ease, color 0.35s ease;
+  }
+
+  body {
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-base);
+    color: var(--text-main);
+    transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* ==========================================================================
+   Spatial Frosted Glass Utilities
+   ========================================================================== */
+
+.spatial-glass {
+  background: var(--glass-panel);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), var(--glass-bevel);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.spatial-glass-subtle {
+  background: var(--glass-panel-subtle);
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-bevel);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.spatial-glass-well {
+  background: var(--glass-inner-well);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+html.light .spatial-glass-well {
+  border: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+/* Backward-compatible glass classes */
+.glass-panel {
+  background: var(--glass-panel);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card {
+  background: var(--glass-panel-subtle);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Specular Highlighting */
+.hover-specular {
+  position: relative;
+}
+.hover-specular::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  opacity: 0.5;
+  transition: opacity 0.3s, left 0.3s, right 0.3s;
+  pointer-events: none;
+}
+.hover-specular:hover::before {
+  opacity: 1;
+  left: 5%;
+  right: 5%;
+}
+
+.apple-glass {
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  position: relative;
+}
+.apple-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(0, 245, 255, 0.12) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+html.light .apple-glass::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.3) 40%, rgba(0, 210, 220, 0.2) 100%);
+}
+
+/* Button sheen dynamic shine */
+@keyframes sheenSweep {
+  0% { transform: translateX(-150%) skewX(-20deg); }
+  50%, 100% { transform: translateX(200%) skewX(-20deg); }
+}
+.sheen-active {
+  position: relative;
+  overflow: hidden;
+}
+.sheen-active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: sheenSweep 4.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+/* Floating animation utilities */
+@keyframes floatSlow {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(35px, -25px) scale(1.06); }
+}
+@keyframes floatReverse {
+  0%, 100% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(-40px, 30px) scale(0.95); }
+}
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.85; }
+}
+
+.animate-float-slow {
+  animation: floatSlow 14s ease-in-out infinite;
+}
+.animate-float-reverse {
+  animation: floatReverse 18s ease-in-out infinite;
+}
+.animate-pulse-glow {
+  animation: pulseGlow 6s ease-in-out infinite;
+}
+
+/* Dual-Theme Scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+.dark ::-webkit-scrollbar-track {
+  background: #07090e;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+html:not(.dark) ::-webkit-scrollbar-track,
+.light ::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+html:not(.dark) ::-webkit-scrollbar-thumb,
+.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+html:not(.dark) ::-webkit-scrollbar-thumb:hover,
+.light ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

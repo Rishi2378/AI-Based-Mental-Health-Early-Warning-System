@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="web_dashboard" name="shell-type"/>
+<title>MindGuard AI - Multimodal Neural Assessment Wizard</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#e9feff",
+            "on-primary": "#003739",
+            "primary-container": "#00f5ff",
+            "primary-fixed": "#63f7ff",
+            "primary-fixed-dim": "#00dce5",
+            "secondary": "#dbb8ff",
+            "on-secondary": "#470083",
+            "secondary-container": "#6807ba",
+            "secondary-fixed": "#efdbff",
+            "secondary-fixed-dim": "#dbb8ff",
+            "tertiary": "#fff9f8",
+            "tertiary-fixed": "#ffd9dc",
+            "tertiary-fixed-dim": "#ffb2ba",
+            "tertiary-container": "#ffd3d6",
+            "background": "#11131b",
+            "on-background": "#e1e2ed",
+            "surface": "#11131b",
+            "on-surface": "#e1e2ed",
+            "surface-dim": "#11131b",
+            "surface-container-lowest": "#0c0e15",
+            "surface-container-low": "#191b23",
+            "surface-container": "#1d1f27",
+            "surface-container-high": "#272a32",
+            "surface-container-highest": "#32343d",
+            "surface-bright": "#373941",
+            "outline": "#849495",
+            "outline-variant": "#3a494a",
+            "error": "#ffb4ab",
+            "error-container": "#93000a"
+          },
+          fontFamily: {
+            "display-hero": ["Manrope", "sans-serif"],
+            "headline-lg": ["Manrope", "sans-serif"],
+            "headline-md": ["Manrope", "sans-serif"],
+            "headline-sm": ["Manrope", "sans-serif"],
+            "body-lg": ["Manrope", "sans-serif"],
+            "body-md": ["Manrope", "sans-serif"],
+            "body-sm": ["Manrope", "sans-serif"],
+            "label-mono": ["JetBrains Mono", "monospace"],
+            "label-mono-xs": ["JetBrains Mono", "monospace"],
+            "data-metric-lg": ["Manrope", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "1rem",
+            "lg": "2rem",
+            "xl": "2.5rem",
+            "full": "9999px"
+          },
+          spacing: {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2.5rem"
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    @layer base {
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        overscroll-behavior: none;
+        transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s ease;
+      }
+    }
+    ::-webkit-scrollbar { display: none; }
+
+    /* Ultra-luxurious Apple glass reflections and specular highlights */
+    .apple-glass {
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      position: relative;
+    }
+    .apple-glass::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(0, 245, 255, 0.12) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    .light .apple-glass::before {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.3) 40%, rgba(0, 210, 220, 0.2) 100%);
+    }
+
+    /* Subtle specular reflection bar across headers */
+    .specular-shine {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0) 100%);
+    }
+    .light .specular-shine {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 100%);
+    }
+
+    /* Button sheen dynamic shine */
+    @keyframes sheenSweep {
+      0% { transform: translateX(-150%) skewX(-20deg); }
+      50%, 100% { transform: translateX(200%) skewX(-20deg); }
+    }
+    .sheen-active::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+      animation: sheenSweep 4.5s infinite;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen relative selection:bg-primary-container selection:text-on-primary-container">
+<!-- Ambient Holographic Light Halos -->
+<div class="fixed inset-0 pointer-events-none z-0 overflow-hidden transition-opacity duration-700">
+<!-- Dark Mode Halos -->
+<div class="dark:opacity-100 opacity-0 transition-opacity duration-500">
+<div class="absolute -top-[12%] -left-[10%] w-[55vw] h-[55vw] rounded-full bg-[radial-gradient(circle,rgba(0,245,255,0.12)_0%,transparent_65%)] blur-3xl"></div>
+<div class="absolute top-[35%] -right-[12%] w-[60vw] h-[60vw] rounded-full bg-[radial-gradient(circle,rgba(104,7,186,0.14)_0%,transparent_65%)] blur-3xl"></div>
+<div class="absolute -bottom-[20%] left-[25%] w-[50vw] h-[50vw] rounded-full bg-[radial-gradient(circle,rgba(0,220,229,0.08)_0%,transparent_65%)] blur-3xl"></div>
+<div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
+</div>
+<!-- Light Mode Halos -->
+<div class="dark:opacity-0 opacity-100 transition-opacity duration-500">
+<div class="absolute -top-[10%] -left-[10%] w-[55vw] h-[55vw] rounded-full bg-[radial-gradient(circle,rgba(0,200,225,0.15)_0%,transparent_65%)] blur-3xl"></div>
+<div class="absolute top-[30%] -right-[10%] w-[60vw] h-[60vw] rounded-full bg-[radial-gradient(circle,rgba(147,75,235,0.12)_0%,transparent_65%)] blur-3xl"></div>
+<div class="absolute -bottom-[20%] left-[20%] w-[50vw] h-[50vw] rounded-full bg-[radial-gradient(circle,rgba(0,180,200,0.1)_0%,transparent_65%)] blur-3xl"></div>
+<div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.025)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.025)_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
+</div>
+</div>
+<!-- Top Navigation Header (Apple Glassmorphism with Theme Switcher) -->
+<header class="fixed top-0 inset-x-0 h-16 z-50 apple-glass dark:bg-surface-container-lowest/80 bg-white/70 shadow-[0_1px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_24px_rgba(0,0,0,0.45)] border-b border-black/[0.04] dark:border-white/[0.08] transition-colors duration-300">
+<div class="w-full h-16 px-space-md lg:px-space-lg flex items-center justify-between gap-space-md">
+<!-- Brand Logo -->
+<div class="flex items-center gap-space-md shrink-0">
+<div class="relative flex items-center justify-center">
+<div class="absolute inset-0 rounded-full bg-primary-container/30 blur-md animate-pulse"></div>
+<img alt="MindGuard AI Holographic Shield Emblem" class="relative h-8 w-auto object-contain drop-shadow-[0_0_10px_rgba(0,245,255,0.5)]" src="https://lh3.googleusercontent.com/aida/AEtjO1Xp-WHawfQ2KgNXOi-uZpi_M1DAGYxazrfZjO9WGWH9PIIXDKRV-zvRzL22ioml5Y9qFeYTSBzDEmneObpYE8_E5Rly74cOyOBSeHtrspkSnpH9eSCNZkv5DbKReHUGRaPRiQQEG-DU0twMVfBmy_ud2SHM9G_fdCAHok3-ID6b1Aka-EFYTmEU_dOtWEGLZFGb-z4YTd_Ybu8yfN9VkNMZkDRydlE8YWdklgoVOGfPwQlH8E-rCGHBNQ"/>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-base md:text-lg font-extrabold tracking-tight dark:text-primary text-slate-900 leading-none flex items-center gap-1.5">
+            MindGuard AI
+            <span class="text-[10px] px-1.5 py-0.5 rounded-full font-label-mono-xs bg-cyan-500/10 text-cyan-500 dark:text-primary-container font-semibold">PRO</span>
+</span>
+<span class="font-label-mono-xs text-[10px] dark:text-primary-fixed-dim text-cyan-600 uppercase tracking-widest mt-0.5">v2.4 Multimodal Neural</span>
+</div>
+</div>
+<!-- Center Nav Links -->
+<div class="hidden xl:flex items-center gap-space-sm">
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full dark:bg-white/[0.06] bg-slate-900/[0.05] border border-black/[0.05] dark:border-white/[0.08] shadow-inner">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-400"></span>
+</span>
+<span class="font-label-mono-xs text-xs dark:text-primary-fixed text-cyan-700 font-semibold">API Live</span>
+<span class="font-label-mono-xs text-xs dark:text-on-surface-variant/70 text-slate-400">• 12ms</span>
+</div>
+<nav class="flex items-center gap-1 p-1 rounded-full dark:bg-white/[0.04] bg-slate-100/80 border border-black/[0.04] dark:border-white/[0.06] backdrop-blur-xl">
+<a aria-current="page" class="px-3.5 py-1.5 rounded-full font-body-sm text-xs font-semibold transition-all dark:bg-white/[0.12] bg-white text-cyan-600 dark:text-primary shadow-[0_2px_10px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]" data-path="assessment-wizard" href="#">Assessment Wizard</a>
+<a class="px-3 py-1.5 rounded-full font-body-sm text-xs dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white hover:bg-black/[0.03] dark:hover:bg-white/[0.06] transition-all" data-path="text-nlp" href="#">Text NLP</a>
+<a class="px-3 py-1.5 rounded-full font-body-sm text-xs dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white hover:bg-black/[0.03] dark:hover:bg-white/[0.06] transition-all" data-path="voice-lab" href="#">Voice Lab</a>
+<a class="px-3 py-1.5 rounded-full font-body-sm text-xs dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white hover:bg-black/[0.03] dark:hover:bg-white/[0.06] transition-all" data-path="questionnaire" href="#">Questionnaire</a>
+<a class="px-3 py-1.5 rounded-full font-body-sm text-xs dark:text-slate-400 text-slate-600 hover:text-slate-900 dark:hover:text-white hover:bg-black/[0.03] dark:hover:bg-white/[0.06] transition-all" data-path="model-stats" href="#">Model Stats</a>
+</nav>
+</div>
+<!-- Right Actions: Theme Switcher & User Profile -->
+<div class="flex items-center gap-2.5 sm:gap-space-sm shrink-0">
+<!-- Apple-Inspired Frosted Theme Switcher -->
+<button aria-label="Toggle Dark/Light Mode" class="relative group p-2 rounded-full dark:bg-white/[0.08] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.15] border border-black/[0.06] dark:border-white/[0.12] transition-all duration-300 shadow-sm active:scale-95 flex items-center justify-center" id="theme-toggle-btn" onclick="toggleTheme()" type="button">
+<div class="relative w-5 h-5 flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-lg dark:text-amber-300 text-slate-700 dark:opacity-100 dark:scale-100 opacity-0 scale-50 transition-all duration-300 absolute inset-0 flex items-center justify-center">light_mode</span>
+<span class="material-symbols-outlined text-lg dark:text-amber-300 text-slate-700 dark:opacity-0 dark:scale-50 opacity-100 scale-100 transition-all duration-300 absolute inset-0 flex items-center justify-center">dark_mode</span>
+</div>
+</button>
+<button class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full dark:bg-white/[0.05] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.1] border border-black/[0.04] dark:border-white/[0.08] dark:text-slate-300 text-slate-700 transition-all font-label-mono-xs text-xs">
+<span class="material-symbols-outlined text-sm text-purple-400 dark:text-secondary-fixed-dim">verified_user</span>
+<span>Academic Non-Diagnostic</span>
+</button>
+<a class="relative overflow-hidden group flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-400 via-teal-400 to-cyan-500 text-slate-950 font-body-md text-xs font-bold tracking-wide shadow-[0_2px_16px_rgba(0,245,255,0.4)] hover:shadow-[0_4px_22px_rgba(0,245,255,0.65)] hover:-translate-y-0.5 active:translate-y-0 transition-all sheen-active" data-path="assessment-wizard" href="#">
+<span class="material-symbols-outlined text-base">add_chart</span>
+<span class="hidden md:inline font-headline-sm text-xs font-bold">New Assessment</span>
+</a>
+<div class="h-6 w-[1px] dark:bg-white/10 bg-slate-300 hidden sm:block"></div>
+<div class="relative cursor-pointer">
+<img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-cyan-400/50 p-0.5 dark:bg-slate-800 bg-white" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTpnZYR5-tD15-1-BGkPQ6GfIG7WLfO5mIhYzruIJsFQJKmLMpI-IcASC2L18Yw8A5BCk5if4PfzOSFUYXt4mx9dgjeRiafkTRKnLrdRjOrlII-SpjpsUFv8xiYpxeEf65Ya2F_O-jomlQ0cnD_6nlMNruw40yu0U84nAQGNkhbqQHrMMFMqXKZXBFOxZiI4tLzMPdsmR4IF8AekB3QViMBkbjSgUp6nFdTjnAZoFQt7rTjRBnkahg"/>
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 dark:ring-surface-container-lowest ring-white"></span>
+</div>
+</div>
+</div>
+</header>
+<!-- Left Sidebar (Apple Frosted Glass) -->
+<aside class="fixed left-0 top-0 h-full w-64 apple-glass dark:bg-surface-container-lowest/85 bg-white/70 border-r border-black/[0.04] dark:border-white/[0.06] z-40 flex flex-col pt-20 pb-space-md shadow-[4px_0_30px_rgba(0,0,0,0.03)] dark:shadow-[4px_0_30px_rgba(0,0,0,0.5)] transition-colors duration-300">
+<div class="px-space-md py-space-xs mb-space-xs">
+<span class="font-label-mono-xs text-[11px] font-bold dark:text-outline text-slate-400 tracking-widest uppercase">Neural Streams</span>
+</div>
+<nav class="flex-1 px-space-sm space-y-1 overflow-y-auto">
+<a class="flex items-center gap-3 px-space-md py-2.5 rounded-xl dark:text-slate-300 text-slate-600 hover:bg-black/[0.03] dark:hover:bg-white/[0.06] hover:text-slate-900 dark:hover:text-white transition-all group" data-path="dashboard" href="#">
+<span class="material-symbols-outlined text-xl text-cyan-500 dark:text-primary-fixed-dim transition-transform group-hover:scale-110">space_dashboard</span>
+<span class="font-body-md text-sm font-medium">Dashboard</span>
+</a>
+<a aria-current="page" class="flex items-center gap-3 px-space-md py-2.5 rounded-xl transition-all dark:bg-white/[0.1] bg-cyan-50/90 text-cyan-700 dark:text-primary border border-cyan-400/20 dark:border-white/10 shadow-[0_2px_12px_rgba(0,245,255,0.1)] group font-semibold" data-path="assessment-wizard" href="#">
+<span class="material-symbols-outlined text-xl text-cyan-500 dark:text-primary-container">auto_awesome</span>
+<span class="font-body-md text-sm">Assessment Wizard</span>
+</a>
+<a class="flex items-center gap-3 px-space-md py-2.5 rounded-xl dark:text-slate-300 text-slate-600 hover:bg-black/[0.03] dark:hover:bg-white/[0.06] hover:text-slate-900 dark:hover:text-white transition-all group" data-path="text-nlp" href="#">
+<span class="material-symbols-outlined text-xl text-cyan-500 dark:text-primary-fixed-dim transition-transform group-hover:scale-110">neurology</span>
+<span class="font-body-md text-sm font-medium">Text NLP Stream</span>
+</a>
+<a class="flex items-center gap-3 px-space-md py-2.5 rounded-xl dark:text-slate-300 text-slate-600 hover:bg-black/[0.03] dark:hover:bg-white/[0.06] hover:text-slate-900 dark:hover:text-white transition-all group" data-path="voice-lab" href="#">
+<span class="material-symbols-outlined text-xl text-cyan-500 dark:text-primary-fixed-dim transition-transform group-hover:scale-110">graphic_eq</span>
+<span class="font-body-md text-sm font-medium">Voice Acoustic Lab</span>
+</a>
+<a class="flex items-center gap-3 px-space-md py-2.5 rounded-xl dark:text-slate-300 text-slate-600 hover:bg-black/[0.03] dark:hover:bg-white/[0.06] hover:text-slate-900 dark:hover:text-white transition-all group" data-path="questionnaire" href="#">
+<span class="material-symbols-outlined text-xl text-cyan-500 dark:text-primary-fixed-dim transition-transform group-hover:scale-110">fact_check</span>
+<span class="font-body-md text-sm font-medium">Clinical Questionnaire</span>
+</a>
+<a class="flex items-center gap-3 px-space-md py-2.5 rounded-xl dark:text-slate-300 text-slate-600 hover:bg-black/[0.03] dark:hover:bg-white/[0.06] hover:text-slate-900 dark:hover:text-white transition-all group" data-path="history" href="#">
+<span class="material-symbols-outlined text-xl text-cyan-500 dark:text-primary-fixed-dim transition-transform group-hover:scale-110">insights</span>
+<span class="font-body-md text-sm font-medium">Longitudinal History</span>
+</a>
+<a class="flex items-center gap-3 px-space-md py-2.5 rounded-xl dark:text-slate-300 text-slate-600 hover:bg-black/[0.03] dark:hover:bg-white/[0.06] hover:text-slate-900 dark:hover:text-white transition-all group" data-path="model-stats" href="#">
+<span class="material-symbols-outlined text-xl text-cyan-500 dark:text-primary-fixed-dim transition-transform group-hover:scale-110">precision_manufacturing</span>
+<span class="font-body-md text-sm font-medium">Model Diagnostics</span>
+</a>
+<a class="flex items-center gap-3 px-space-md py-2.5 rounded-xl dark:text-slate-300 text-slate-600 hover:bg-black/[0.03] dark:hover:bg-white/[0.06] hover:text-slate-900 dark:hover:text-white transition-all group" data-path="home" href="#">
+<span class="material-symbols-outlined text-xl text-cyan-500 dark:text-primary-fixed-dim transition-transform group-hover:scale-110">explore</span>
+<span class="font-body-md text-sm font-medium">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-space-md py-2.5 rounded-xl dark:text-slate-300 text-slate-600 hover:bg-black/[0.03] dark:hover:bg-white/[0.06] hover:text-slate-900 dark:hover:text-white transition-all group" data-path="about" href="#">
+<span class="material-symbols-outlined text-xl text-cyan-500 dark:text-primary-fixed-dim transition-transform group-hover:scale-110">info</span>
+<span class="font-body-md text-sm font-medium">About System</span>
+</a>
+</nav>
+<!-- 988 Crisis Support Button (Frosted Capsule) -->
+<div class="px-space-sm pt-space-sm mt-auto">
+<div class="p-1 rounded-2xl apple-glass dark:bg-white/[0.04] bg-red-500/[0.05] border border-red-500/20 shadow-md">
+<a class="group flex flex-col gap-1.5 p-3 rounded-xl bg-gradient-to-br from-rose-500/15 to-purple-500/10 hover:from-rose-500/25 hover:to-purple-500/20 transition-all" href="tel:988">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-500 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span>
+</span>
+<span class="font-headline-sm text-xs font-extrabold text-rose-500 dark:text-rose-300 tracking-wide">988 Lifeline</span>
+</div>
+<span class="material-symbols-outlined text-sm text-rose-400 group-hover:translate-x-0.5 transition-transform">phone_in_talk</span>
+</div>
+<p class="font-label-mono-xs text-[10px] text-slate-500 dark:text-slate-300 leading-tight">24/7 Free &amp; Confidential Suicide &amp; Crisis Support</p>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<div class="pl-64">
+<main class="relative w-full pt-20 min-h-screen px-space-md lg:px-space-lg pb-space-xl z-10 max-w-7xl mx-auto">
+<div class="flex flex-col w-full gap-space-lg">
+<!-- Top Spatial Telemetry Strip & Status Header (Frosted Apple Card) -->
+<div class="apple-glass dark:bg-white/[0.04] bg-white/70 rounded-2xl p-space-md lg:p-space-lg shadow-[0_8px_32px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)] overflow-hidden relative border border-black/[0.05] dark:border-white/[0.08]">
+<!-- Specular Light Reflection Gradient Overlay -->
+<div class="absolute inset-x-0 top-0 h-10 specular-shine pointer-events-none"></div>
+<div class="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-gradient-to-br from-cyan-400/15 via-purple-500/10 to-transparent blur-3xl pointer-events-none"></div>
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md relative z-10">
+<!-- Title & Dial -->
+<div class="flex items-center gap-space-md">
+<div class="relative flex items-center justify-center w-14 h-14 rounded-2xl dark:bg-white/[0.08] bg-slate-100 shadow-inner shrink-0 border border-black/[0.04] dark:border-white/[0.12]">
+<svg class="w-10 h-10 -rotate-90" viewbox="0 0 44 44">
+<circle class="dark:text-white/10 text-slate-200" cx="22" cy="22" fill="none" r="18" stroke="currentColor" stroke-width="3.5"></circle>
+<circle class="text-cyan-500 dark:text-primary-container transition-all duration-700 ease-out drop-shadow-[0_0_8px_rgba(0,245,255,0.7)]" cx="22" cy="22" fill="none" id="stepper-dial" r="18" stroke="currentColor" stroke-dasharray="113" stroke-dashoffset="75" stroke-linecap="round" stroke-width="3.5"></circle>
+</svg>
+<span class="absolute font-label-mono-xs text-xs font-bold dark:text-primary text-slate-800" id="wizard-step-indicator-text">1/3</span>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-mono-xs text-xs dark:text-cyan-300 text-cyan-700 font-bold uppercase tracking-wider">Clinical Biometric Pipeline</span>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-cyan-500/10 dark:bg-primary-container/15 text-cyan-600 dark:text-primary-container font-label-mono-xs text-[11px] font-semibold border border-cyan-500/20">
+                    Protocol MG-882
+                  </span>
+</div>
+<h1 class="font-headline-lg text-2xl lg:text-3xl font-extrabold dark:text-white text-slate-900 tracking-tight">Multimodal Neural Assessment</h1>
+</div>
+</div>
+<!-- Live Stream Telemetry Chips -->
+<div class="flex flex-wrap items-center gap-2">
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full dark:bg-white/[0.06] bg-slate-100/90 border border-black/[0.04] dark:border-white/[0.08] backdrop-blur-md">
+<span class="h-2 w-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_8px_rgba(0,245,255,0.8)]"></span>
+<span class="font-label-mono-xs text-[11px] dark:text-slate-400 text-slate-500">Linguistic Stream:</span>
+<span class="font-label-mono-xs text-[11px] dark:text-primary text-slate-800 font-bold" id="top-nlp-status">Active Sampling</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full dark:bg-white/[0.06] bg-slate-100/90 border border-black/[0.04] dark:border-white/[0.08] backdrop-blur-md">
+<span class="h-2 w-2 rounded-full bg-purple-400 shadow-[0_0_8px_rgba(168,85,247,0.8)]"></span>
+<span class="font-label-mono-xs text-[11px] dark:text-slate-400 text-slate-500">Bio-Acoustics:</span>
+<span class="font-label-mono-xs text-[11px] dark:text-purple-300 text-purple-700 font-bold" id="top-voice-status">Standby</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full dark:bg-white/[0.06] bg-slate-100/90 border border-black/[0.04] dark:border-white/[0.08] backdrop-blur-md">
+<span class="material-symbols-outlined text-xs text-rose-400">verified</span>
+<span class="font-label-mono-xs text-[11px] dark:text-slate-400 text-slate-500">Fusion Matrix:</span>
+<span class="font-label-mono-xs text-[11px] dark:text-rose-300 text-rose-700 font-bold">Tri-Modal v4</span>
+</div>
+</div>
+</div>
+<!-- Glassy 3-Phase Stepper Navigation Bar -->
+<div class="mt-space-lg pt-space-md border-t border-black/[0.05] dark:border-white/[0.08]">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-sm relative">
+<!-- Step 1 Button -->
+<button class="group relative flex items-center justify-between p-3.5 rounded-xl transition-all duration-300 text-left dark:bg-white/[0.12] bg-white border border-cyan-400/40 dark:border-cyan-400/30 shadow-[0_4px_20px_rgba(0,245,255,0.15)] ring-1 ring-cyan-400/30" id="step-nav-btn-1" onclick="setWizardStep(1)">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-400 to-cyan-300 text-slate-950 flex items-center justify-center font-label-mono font-bold text-xs shadow-[0_0_12px_rgba(0,245,255,0.4)]" id="step-nav-badge-1">
+                    01
+                  </div>
+<div>
+<span class="block font-label-mono-xs text-[10px] uppercase tracking-widest text-cyan-600 dark:text-cyan-300 font-semibold" id="step-nav-weight-1">Phase 01 • Weight 40%</span>
+<span class="block font-headline-sm text-sm font-bold dark:text-white text-slate-900" id="step-nav-title-1">Text NLP Modality</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-cyan-500 dark:text-primary-container" id="step-check-1">edit_note</span>
+</button>
+<!-- Step 2 Button -->
+<button class="group relative flex items-center justify-between p-3.5 rounded-xl transition-all duration-300 text-left dark:bg-white/[0.03] bg-white/40 hover:bg-white/80 dark:hover:bg-white/[0.08] border border-black/[0.04] dark:border-white/[0.06]" id="step-nav-btn-2" onclick="setWizardStep(2)">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg dark:bg-white/[0.08] bg-slate-200 dark:text-slate-300 text-slate-700 flex items-center justify-center font-label-mono font-bold text-xs" id="step-nav-badge-2">
+                    02
+                  </div>
+<div>
+<span class="block font-label-mono-xs text-[10px] uppercase tracking-widest dark:text-slate-400 text-slate-500 font-semibold" id="step-nav-weight-2">Phase 02 • Weight 30%</span>
+<span class="block font-headline-sm text-sm font-bold dark:text-slate-300 text-slate-700" id="step-nav-title-2">Voice Audio Modality</span>
+</div>
+</div>
+<span class="material-symbols-outlined dark:text-slate-500 text-slate-400" id="step-check-2">graphic_eq</span>
+</button>
+<!-- Step 3 Button -->
+<button class="group relative flex items-center justify-between p-3.5 rounded-xl transition-all duration-300 text-left dark:bg-white/[0.03] bg-white/40 hover:bg-white/80 dark:hover:bg-white/[0.08] border border-black/[0.04] dark:border-white/[0.06]" id="step-nav-btn-3" onclick="setWizardStep(3)">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg dark:bg-white/[0.08] bg-slate-200 dark:text-slate-300 text-slate-700 flex items-center justify-center font-label-mono font-bold text-xs" id="step-nav-badge-3">
+                    03
+                  </div>
+<div>
+<span class="block font-label-mono-xs text-[10px] uppercase tracking-widest dark:text-slate-400 text-slate-500 font-semibold" id="step-nav-weight-3">Phase 03 • Weight 30%</span>
+<span class="block font-headline-sm text-sm font-bold dark:text-slate-300 text-slate-700" id="step-nav-title-3">Questionnaire &amp; Fusion</span>
+</div>
+</div>
+<span class="material-symbols-outlined dark:text-slate-500 text-slate-400" id="step-check-3">tune</span>
+</button>
+</div>
+<!-- Stepper Progress Bar -->
+<div class="w-full dark:bg-white/[0.08] bg-slate-200 h-1.5 rounded-full mt-3 overflow-hidden shadow-inner">
+<div class="h-full bg-gradient-to-r from-cyan-400 via-teal-400 to-purple-500 w-1/3 transition-all duration-500 ease-out shadow-[0_0_10px_rgba(0,245,255,0.6)]" id="wizard-progress-bar"></div>
+</div>
+</div>
+</div>
+<!-- ==================== STEP 1: TEXT NLP MODALITY ==================== -->
+<div class="flex flex-col gap-space-lg" id="wizard-step-1">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- Main NLP Reflection Journal Panel -->
+<div class="lg:col-span-8 flex flex-col gap-space-md rounded-2xl apple-glass dark:bg-white/[0.04] bg-white/70 p-space-md lg:p-space-lg shadow-[0_8px_32px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)] border border-black/[0.05] dark:border-white/[0.08] relative overflow-hidden">
+<div class="absolute inset-x-0 top-0 h-10 specular-shine pointer-events-none"></div>
+<div class="flex flex-wrap items-center justify-between gap-space-sm relative z-10">
+<div>
+<span class="font-label-mono-xs text-xs dark:text-cyan-300 text-cyan-700 font-bold uppercase tracking-wider">Linguistic Resonance Collector</span>
+<h2 class="font-headline-md text-xl lg:text-2xl font-bold dark:text-white text-slate-900 mt-0.5">Free-Form Neural Reflection Journal</h2>
+</div>
+<!-- Live Semantic Tag -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full dark:bg-white/[0.08] bg-slate-100 border border-black/[0.04] dark:border-white/[0.1] shadow-inner">
+<span class="h-2 w-2 rounded-full bg-cyan-400 animate-ping"></span>
+<span class="font-label-mono-xs text-xs dark:text-cyan-300 text-cyan-800 font-semibold" id="live-tone-badge">Tension-Latency: Mild</span>
+<span class="font-label-mono-xs text-xs dark:text-slate-500 text-slate-400">|</span>
+<span class="font-label-mono-xs text-xs dark:text-slate-300 text-slate-600 font-mono" id="live-density-badge">Lexical: 0.74</span>
+</div>
+</div>
+<p class="font-body-md text-sm dark:text-slate-300 text-slate-600 leading-relaxed">
+                Document your cognitive state, recent stress triggers, sensory sleep quality, or internal dialogue. Our localized RoBERTa-BiLSTM ensemble evaluates sentence syntax, tense-valence ratio, and emotional fatigue metrics without external cloud storage.
+              </p>
+<!-- Quick Scenario Pills (with glassy hover glow) -->
+<div class="flex flex-wrap items-center gap-2 pt-1">
+<span class="font-label-mono-xs text-[11px] font-bold dark:text-slate-400 text-slate-500 uppercase tracking-wider mr-1">Quick Scenarios:</span>
+<button class="px-3.5 py-1.5 rounded-full dark:bg-white/[0.06] bg-slate-100 hover:bg-cyan-500/10 dark:hover:bg-white/[0.15] border border-black/[0.05] dark:border-white/[0.1] dark:text-slate-200 text-slate-700 font-body-sm text-xs font-semibold transition-all hover:scale-105 active:scale-95 shadow-sm hover:shadow-[0_0_12px_rgba(0,245,255,0.25)]" onclick="insertSampleText('Work Overwhelm')">
+                  ⚡ Work Overwhelm
+                </button>
+<button class="px-3.5 py-1.5 rounded-full dark:bg-white/[0.06] bg-slate-100 hover:bg-cyan-500/10 dark:hover:bg-white/[0.15] border border-black/[0.05] dark:border-white/[0.1] dark:text-slate-200 text-slate-700 font-body-sm text-xs font-semibold transition-all hover:scale-105 active:scale-95 shadow-sm hover:shadow-[0_0_12px_rgba(0,245,255,0.25)]" onclick="insertSampleText('Sleep Anxiety')">
+                  🌙 Sleep Anxiety
+                </button>
+<button class="px-3.5 py-1.5 rounded-full dark:bg-white/[0.06] bg-slate-100 hover:bg-cyan-500/10 dark:hover:bg-white/[0.15] border border-black/[0.05] dark:border-white/[0.1] dark:text-slate-200 text-slate-700 font-body-sm text-xs font-semibold transition-all hover:scale-105 active:scale-95 shadow-sm hover:shadow-[0_0_12px_rgba(0,245,255,0.25)]" onclick="insertSampleText('Social Burnout')">
+                  👥 Social Burnout
+                </button>
+<button class="px-3.5 py-1.5 rounded-full dark:bg-white/[0.06] bg-slate-100 hover:bg-cyan-500/10 dark:hover:bg-white/[0.15] border border-black/[0.05] dark:border-white/[0.1] dark:text-slate-200 text-slate-700 font-body-sm text-xs font-semibold transition-all hover:scale-105 active:scale-95 shadow-sm hover:shadow-[0_0_12px_rgba(0,245,255,0.25)]" onclick="insertSampleText('Morning Clarity')">
+                  ✨ Morning Clarity
+                </button>
+</div>
+<!-- Hyper-Glassy Reflection Textarea -->
+<div class="relative rounded-xl dark:bg-black/40 bg-white/80 p-space-sm border border-black/[0.08] dark:border-white/[0.1] shadow-inner focus-within:shadow-[0_0_24px_rgba(0,245,255,0.25)] focus-within:border-cyan-400/50 transition-all backdrop-blur-xl">
+<textarea class="w-full bg-transparent dark:text-slate-100 text-slate-900 placeholder:text-slate-400 dark:placeholder:text-slate-500 font-body-md text-sm md:text-base resize-none focus:outline-none p-space-sm leading-relaxed" id="journal-input" oninput="updateJournalMetrics(this)" placeholder="Type or paste your mental status narrative here... For instance: 'I have felt an acute cognitive fatigue since Thursday. Sleep is interrupted every 2 hours with rapid thoughts about upcoming deadlines, causing my concentration to drift mid-afternoon...'" rows="7"></textarea>
+<!-- Bottom Metrology Ribbon -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm pt-2 mt-1 px-space-xs border-t border-black/[0.04] dark:border-white/[0.06] dark:text-slate-400 text-slate-500">
+<div class="flex items-center gap-space-md font-label-mono-xs text-xs">
+<span>Chars: <strong class="dark:text-cyan-300 text-cyan-700 font-bold" id="char-counter">342</strong> / 2000</span>
+<span>Words: <strong class="dark:text-cyan-300 text-cyan-700 font-bold" id="word-counter">68</strong></span>
+<span class="hidden sm:inline dark:text-slate-400 text-slate-500">Target: &gt; 50 words</span>
+</div>
+<button class="font-label-mono-xs text-xs dark:text-slate-400 text-slate-500 hover:text-rose-500 dark:hover:text-rose-400 transition-colors flex items-center gap-1" onclick="clearJournal()">
+<span class="material-symbols-outlined text-sm">delete</span> Clear
+                  </button>
+</div>
+</div>
+<!-- Real-Time Text Semantic Extraction Matrix -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-sm">
+<div class="p-space-sm rounded-xl dark:bg-white/[0.04] bg-slate-50/80 border border-black/[0.04] dark:border-white/[0.06] shadow-sm">
+<span class="font-label-mono-xs text-[11px] dark:text-slate-400 text-slate-500 block font-medium">Valence Index</span>
+<span class="font-headline-sm text-lg font-bold text-rose-500 dark:text-rose-300" id="metric-valence">-0.42</span>
+<span class="font-label-mono-xs text-[10px] dark:text-slate-500 text-slate-400 block mt-0.5">Negative tilt</span>
+</div>
+<div class="p-space-sm rounded-xl dark:bg-white/[0.04] bg-slate-50/80 border border-black/[0.04] dark:border-white/[0.06] shadow-sm">
+<span class="font-label-mono-xs text-[11px] dark:text-slate-400 text-slate-500 block font-medium">Cognitive Tension</span>
+<span class="font-headline-sm text-lg font-bold dark:text-cyan-300 text-cyan-700" id="metric-tension">68%</span>
+<span class="font-label-mono-xs text-[10px] dark:text-slate-500 text-slate-400 block mt-0.5">Sustained strain</span>
+</div>
+<div class="p-space-sm rounded-xl dark:bg-white/[0.04] bg-slate-50/80 border border-black/[0.04] dark:border-white/[0.06] shadow-sm">
+<span class="font-label-mono-xs text-[11px] dark:text-slate-400 text-slate-500 block font-medium">Absolutist Words</span>
+<span class="font-headline-sm text-lg font-bold text-purple-600 dark:text-purple-300" id="metric-absolutist">4 hits</span>
+<span class="font-label-mono-xs text-[10px] dark:text-slate-500 text-slate-400 block mt-0.5">"always", "never"</span>
+</div>
+<div class="p-space-sm rounded-xl dark:bg-white/[0.04] bg-slate-50/80 border border-black/[0.04] dark:border-white/[0.06] shadow-sm">
+<span class="font-label-mono-xs text-[11px] dark:text-slate-400 text-slate-500 block font-medium">Syntactic Coherence</span>
+<span class="font-headline-sm text-lg font-bold text-teal-600 dark:text-primary-container" id="metric-coherence">0.89</span>
+<span class="font-label-mono-xs text-[10px] dark:text-slate-500 text-slate-400 block mt-0.5">High structuring</span>
+</div>
+</div>
+<!-- Text Action Bar -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-space-md pt-space-sm border-t border-black/[0.05] dark:border-white/[0.08]">
+<button class="w-full sm:w-auto px-5 py-2.5 rounded-full dark:bg-white/[0.06] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.12] dark:text-slate-300 text-slate-700 font-body-sm text-xs font-semibold transition-all border border-black/[0.05] dark:border-white/[0.08]" onclick="skipToStep(2)">
+                  Skip Modality (Default baseline 50%)
+                </button>
+<button class="relative overflow-hidden w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-gradient-to-r from-cyan-400 via-teal-400 to-cyan-500 text-slate-950 font-headline-sm text-sm font-extrabold shadow-[0_4px_24px_rgba(0,245,255,0.45)] hover:shadow-[0_6px_32px_rgba(0,245,255,0.7)] hover:-translate-y-0.5 active:translate-y-0 transition-all sheen-active" onclick="saveAndProceed(1, 2)">
+<span>Save &amp; Proceed to Audio Diagnostic</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Lateral Sidebar: Context & Diagnostic Visualizer -->
+<div class="lg:col-span-4 flex flex-col gap-space-md">
+<!-- Modality Vector Card -->
+<div class="p-space-md rounded-2xl apple-glass dark:bg-white/[0.04] bg-white/70 border border-black/[0.05] dark:border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)] relative overflow-hidden">
+<div class="absolute inset-x-0 top-0 h-10 specular-shine pointer-events-none"></div>
+<div class="flex items-center justify-between mb-space-sm relative z-10">
+<span class="font-label-mono-xs text-xs dark:text-cyan-300 text-cyan-700 uppercase tracking-widest font-bold">Modality Architecture</span>
+<span class="material-symbols-outlined text-cyan-500 text-lg">psychology</span>
+</div>
+<div class="relative w-full h-44 rounded-xl overflow-hidden bg-slate-950 flex items-center justify-center border border-black/[0.06] dark:border-white/[0.1]">
+<img class="w-full h-full object-cover opacity-85" data-alt="Holographic brain model with glowing neural synapse pathways" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC2E55Pf4Lq0htjxUlZpCOb0aHH7ldnc_rog2FNWE8nya4r_Ye_ckLdwVWmthPfRnYPAl4VAQ-B69ewp8aBn-xdWVaSxI-FSeFpnI5rgm265dvFSK7gnQWQqI5bmG5-9_iF65q4koceIAHfH7nYQkOj5Cj3A9vosfAHv6JZ6_U49PulllQU_reWNjg_gjAa2OAx7zFkA7jxsNazR6mGgcAMdnN2p0wo1vxZ5xGxZjX0F1WKTMSv-4n"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+<div class="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between apple-glass bg-slate-900/80 px-3 py-1.5 rounded-full border border-white/10">
+<span class="font-label-mono-xs text-[11px] text-cyan-300 font-semibold">Embedding: 768-D BioSent</span>
+<span class="font-label-mono-xs text-[10px] text-slate-300">Quantized FP16</span>
+</div>
+</div>
+<div class="mt-space-sm space-y-2 relative z-10">
+<div class="flex justify-between font-label-mono-xs text-xs">
+<span class="dark:text-slate-400 text-slate-500">Linguistic Weight Target</span>
+<span class="dark:text-white text-slate-900 font-bold">40% Total Fusion</span>
+</div>
+<div class="w-full dark:bg-white/[0.08] bg-slate-200 h-2 rounded-full overflow-hidden shadow-inner">
+<div class="bg-gradient-to-r from-cyan-400 to-teal-400 h-full w-[40%] rounded-full shadow-[0_0_8px_rgba(0,245,255,0.6)]"></div>
+</div>
+</div>
+</div>
+<!-- Academic Privacy Box -->
+<div class="p-space-md rounded-2xl apple-glass dark:bg-white/[0.04] bg-white/70 border border-black/[0.05] dark:border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)] relative overflow-hidden">
+<div class="flex items-center gap-2 mb-2 text-cyan-600 dark:text-cyan-300">
+<span class="material-symbols-outlined text-base">lock</span>
+<span class="font-label-mono-xs text-xs font-bold uppercase tracking-wider">Zero-Persistence Sandbox</span>
+</div>
+<p class="font-body-sm text-xs dark:text-slate-300 text-slate-600 leading-relaxed">
+                  Journal text is evaluated directly inside browser execution memory via lightweight WebAssembly embeddings. No raw strings are indexed, logged, or transferred to third-party large language model vendors.
+                </p>
+</div>
+</div>
+</div>
+</div>
+<!-- ==================== STEP 2: VOICE AUDIO MODALITY ==================== -->
+<div class="hidden flex-col gap-space-lg" id="wizard-step-2">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- Voice Capture Lab Container -->
+<div class="lg:col-span-8 flex flex-col gap-space-md rounded-2xl apple-glass dark:bg-white/[0.04] bg-white/70 p-space-md lg:p-space-lg shadow-[0_8px_32px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)] border border-black/[0.05] dark:border-white/[0.08] relative overflow-hidden">
+<div class="absolute inset-x-0 top-0 h-10 specular-shine pointer-events-none"></div>
+<div class="flex flex-wrap items-center justify-between gap-space-sm relative z-10">
+<div>
+<span class="font-label-mono-xs text-xs dark:text-purple-300 text-purple-700 uppercase tracking-wider font-bold">Acoustic Biomarker Collector</span>
+<h2 class="font-headline-md text-xl lg:text-2xl font-bold dark:text-white text-slate-900 mt-0.5">Sustained Vocalization &amp; Speech Kinematics</h2>
+</div>
+<!-- Audio State Tag -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full dark:bg-white/[0.08] bg-slate-100 border border-black/[0.04] dark:border-white/[0.1] shadow-inner" id="audio-live-chip">
+<span class="h-2 w-2 rounded-full bg-slate-400"></span>
+<span class="font-label-mono-xs text-xs dark:text-slate-300 text-slate-700 font-semibold" id="audio-engine-state">Audio Engine: Idle</span>
+</div>
+</div>
+<p class="font-body-md text-sm dark:text-slate-300 text-slate-600 leading-relaxed">
+                Read the standard phoneme passage below aloud for 15 seconds. Acoustic engines parse fundamental frequency variability (F0 shimmer/jitter), harmonic-to-noise ratio (HNR), and pause latency cadence to detect psychomotor retardation patterns.
+              </p>
+<!-- Standard Phoneme Reading Prompt Box -->
+<div class="p-space-md rounded-xl dark:bg-white/[0.03] bg-slate-50 border border-black/[0.04] dark:border-white/[0.06]">
+<span class="font-label-mono-xs text-[11px] dark:text-slate-400 text-slate-500 uppercase tracking-wider block mb-2 font-bold">Standard Clinical Phoneme Script:</span>
+<p class="font-headline-sm text-base md:text-lg dark:text-cyan-200 text-cyan-950 leading-relaxed italic font-medium">
+                  "The north wind and the sun were disputing which was the stronger, when a traveler came along wrapped in a warm cloak. As I observe this morning breeze, my breath remains steady, measured, and present."
+                </p>
+</div>
+<!-- Waveform Visualizer Screen -->
+<div class="relative w-full h-52 rounded-xl dark:bg-black/50 bg-slate-900 overflow-hidden flex flex-col items-center justify-center p-space-md shadow-inner border border-black/[0.08] dark:border-white/[0.08]">
+<div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:1.5rem_1.5rem] pointer-events-none"></div>
+<!-- Animated Simulated Waveform Bars -->
+<div class="relative z-10 w-full flex items-center justify-center gap-1.5 h-28 px-space-md" id="waveform-container">
+<span class="w-1.5 h-6 bg-purple-400/40 rounded-full transition-all duration-150"></span>
+<span class="w-1.5 h-10 bg-purple-400/60 rounded-full transition-all duration-150"></span>
+<span class="w-1.5 h-16 bg-cyan-400 rounded-full transition-all duration-150 shadow-[0_0_8px_rgba(0,245,255,0.5)]"></span>
+<span class="w-1.5 h-8 bg-purple-400/70 rounded-full transition-all duration-150"></span>
+<span class="w-1.5 h-24 bg-cyan-400 rounded-full transition-all duration-150 shadow-[0_0_12px_rgba(0,245,255,0.7)]"></span>
+<span class="w-1.5 h-14 bg-purple-400 rounded-full transition-all duration-150"></span>
+<span class="w-1.5 h-20 bg-cyan-400 rounded-full transition-all duration-150 shadow-[0_0_10px_rgba(0,245,255,0.6)]"></span>
+<span class="w-1.5 h-9 bg-purple-400/50 rounded-full transition-all duration-150"></span>
+<span class="w-1.5 h-12 bg-purple-400/80 rounded-full transition-all duration-150"></span>
+<span class="w-1.5 h-28 bg-cyan-400 rounded-full transition-all duration-150 shadow-[0_0_16px_rgba(0,245,255,0.8)]"></span>
+<span class="w-1.5 h-18 bg-purple-400 rounded-full transition-all duration-150"></span>
+<span class="w-1.5 h-10 bg-purple-400/60 rounded-full transition-all duration-150"></span>
+<span class="w-1.5 h-7 bg-purple-400/40 rounded-full transition-all duration-150"></span>
+</div>
+<!-- Time Clock Stamp -->
+<div class="relative z-10 mt-2 flex items-center gap-space-md font-label-mono-xs text-xs">
+<span class="text-cyan-400 font-bold font-mono" id="recording-timer">00:00 / 00:15</span>
+<span class="text-slate-400">Sample Rate: 48.0 kHz 24-bit PCM</span>
+</div>
+</div>
+<!-- Recording Controls Dock -->
+<div class="flex flex-wrap items-center justify-center gap-space-md py-space-sm">
+<button class="relative overflow-hidden flex items-center gap-3 px-8 py-3.5 rounded-full bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-500 text-white font-headline-sm text-sm font-bold shadow-[0_4px_24px_rgba(104,7,186,0.45)] hover:shadow-[0_6px_36px_rgba(104,7,186,0.7)] hover:scale-105 active:scale-95 transition-all sheen-active" id="toggle-record-btn" onclick="toggleAudioRecording()">
+<span class="material-symbols-outlined text-xl" id="record-btn-icon">mic</span>
+<span id="record-btn-text">Start 15s Speech Capture</span>
+</button>
+<button class="px-space-md py-3 rounded-full dark:bg-white/[0.06] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.12] dark:text-slate-200 text-slate-800 font-body-sm text-xs font-semibold transition-all border border-black/[0.05] dark:border-white/[0.08] flex items-center gap-2" onclick="simulateAudioClip()">
+<span class="material-symbols-outlined text-sm">upload_file</span> Load Demo Clinical Voice
+                </button>
+</div>
+<!-- Acoustic Metrics Matrix -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-sm">
+<div class="p-space-sm rounded-xl dark:bg-white/[0.04] bg-slate-50/80 border border-black/[0.04] dark:border-white/[0.06] shadow-sm">
+<span class="font-label-mono-xs text-[11px] dark:text-slate-400 text-slate-500 block font-medium">F0 Pitch Jitter</span>
+<span class="font-headline-sm text-lg font-bold dark:text-cyan-300 text-cyan-700" id="metric-jitter">1.24%</span>
+<span class="font-label-mono-xs text-[10px] dark:text-slate-500 text-slate-400 block mt-0.5">Normal &lt; 1.04%</span>
+</div>
+<div class="p-space-sm rounded-xl dark:bg-white/[0.04] bg-slate-50/80 border border-black/[0.04] dark:border-white/[0.06] shadow-sm">
+<span class="font-label-mono-xs text-[11px] dark:text-slate-400 text-slate-500 block font-medium">Shimmer (Amplitude)</span>
+<span class="font-headline-sm text-lg font-bold text-purple-600 dark:text-purple-300" id="metric-shimmer">3.41%</span>
+<span class="font-label-mono-xs text-[10px] dark:text-slate-500 text-slate-400 block mt-0.5">Mild vocal strain</span>
+</div>
+<div class="p-space-sm rounded-xl dark:bg-white/[0.04] bg-slate-50/80 border border-black/[0.04] dark:border-white/[0.06] shadow-sm">
+<span class="font-label-mono-xs text-[11px] dark:text-slate-400 text-slate-500 block font-medium">HNR (Harmonics)</span>
+<span class="font-headline-sm text-lg font-bold text-teal-600 dark:text-primary-container" id="metric-hnr">18.6 dB</span>
+<span class="font-label-mono-xs text-[10px] dark:text-slate-500 text-slate-400 block mt-0.5">Acoustic clarity</span>
+</div>
+<div class="p-space-sm rounded-xl dark:bg-white/[0.04] bg-slate-50/80 border border-black/[0.04] dark:border-white/[0.06] shadow-sm">
+<span class="font-label-mono-xs text-[11px] dark:text-slate-400 text-slate-500 block font-medium">Pause Rate / Retardation</span>
+<span class="font-headline-sm text-lg font-bold text-rose-500 dark:text-rose-300" id="metric-pause">0.31 s</span>
+<span class="font-label-mono-xs text-[10px] dark:text-slate-500 text-slate-400 block mt-0.5">Latent hesitation</span>
+</div>
+</div>
+<!-- Step 2 Navigation Flow -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-space-md pt-space-sm border-t border-black/[0.05] dark:border-white/[0.08]">
+<button class="px-5 py-2.5 rounded-full dark:bg-white/[0.06] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.12] dark:text-slate-300 text-slate-700 font-body-sm text-xs font-semibold transition-all border border-black/[0.05] dark:border-white/[0.08] flex items-center gap-1.5" onclick="setWizardStep(1)">
+<span class="material-symbols-outlined text-sm">arrow_back</span> Back to Text NLP
+                </button>
+<div class="flex items-center gap-space-sm w-full sm:w-auto">
+<button class="px-5 py-2.5 rounded-full dark:bg-white/[0.06] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.12] dark:text-slate-300 text-slate-700 font-body-sm text-xs font-semibold transition-all border border-black/[0.05] dark:border-white/[0.08]" onclick="skipToStep(3)">
+                    Skip Audio
+                  </button>
+<button class="relative overflow-hidden w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-gradient-to-r from-cyan-400 via-teal-400 to-cyan-500 text-slate-950 font-headline-sm text-sm font-extrabold shadow-[0_4px_24px_rgba(0,245,255,0.45)] hover:shadow-[0_6px_32px_rgba(0,245,255,0.7)] hover:-translate-y-0.5 active:translate-y-0 transition-all sheen-active" onclick="saveAndProceed(2, 3)">
+<span>Save &amp; Continue to Clinical Form</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Lateral Sidebar: Voice Spectrogram Reference -->
+<div class="lg:col-span-4 flex flex-col gap-space-md">
+<div class="p-space-md rounded-2xl apple-glass dark:bg-white/[0.04] bg-white/70 border border-black/[0.05] dark:border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)] relative overflow-hidden">
+<div class="absolute inset-x-0 top-0 h-10 specular-shine pointer-events-none"></div>
+<div class="flex items-center justify-between mb-space-sm relative z-10">
+<span class="font-label-mono-xs text-xs dark:text-purple-300 text-purple-700 uppercase tracking-widest font-bold">Spectrogram Analysis</span>
+<span class="material-symbols-outlined text-purple-400 text-lg">graphic_eq</span>
+</div>
+<div class="relative w-full h-44 rounded-xl overflow-hidden bg-slate-950 flex items-center justify-center border border-black/[0.06] dark:border-white/[0.1]">
+<img class="w-full h-full object-cover opacity-85" data-alt="Futuristic cyber audio spectrogram display showing neon purple and cyan frequency bands" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSVKgG2lGotFPDMX5nnfzMRU4XYpppBGONjgp6zxzoqIEBWHiYJ_PNw5g_wl7hDP4Sza1SnCRUnGGXwwWRsARjbXO7MMlBASDFYN7WczKFmHQWImRDAsmBaOnJO04bu_Cxkc5gZd02u8JoZ1DDhKkEvcveAGqcQ9NzdMKeBmQtnZtOmnW33WHv_j7q1MZ5hLjU51ho7Td3l-F80XdceMXE0rU_Z16SpMf399S_i7jbUvMU624JWQ9u"/>
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+<div class="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between apple-glass bg-slate-900/80 px-3 py-1.5 rounded-full border border-white/10">
+<span class="font-label-mono-xs text-[11px] text-purple-300 font-semibold">FFT 1024-Point Hanning</span>
+<span class="font-label-mono-xs text-[10px] text-slate-300">Mel-Scale</span>
+</div>
+</div>
+<div class="mt-space-sm space-y-2 relative z-10">
+<div class="flex justify-between font-label-mono-xs text-xs">
+<span class="dark:text-slate-400 text-slate-500">Acoustic Weight Target</span>
+<span class="dark:text-purple-300 text-purple-700 font-bold">30% Total Fusion</span>
+</div>
+<div class="w-full dark:bg-white/[0.08] bg-slate-200 h-2 rounded-full overflow-hidden shadow-inner">
+<div class="bg-gradient-to-r from-purple-500 to-indigo-500 h-full w-[30%] rounded-full shadow-[0_0_8px_rgba(168,85,247,0.6)]"></div>
+</div>
+</div>
+</div>
+<div class="p-space-md rounded-2xl apple-glass dark:bg-white/[0.04] bg-white/70 border border-black/[0.05] dark:border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)] relative overflow-hidden">
+<div class="flex items-center gap-2 mb-2 text-purple-600 dark:text-purple-300">
+<span class="material-symbols-outlined text-base">mic_external_off</span>
+<span class="font-label-mono-xs text-xs font-bold uppercase tracking-wider">Audio Discard Guarantee</span>
+</div>
+<p class="font-body-sm text-xs dark:text-slate-300 text-slate-600 leading-relaxed">
+                  Raw audio waveforms are destroyed immediately following local acoustic feature extraction. Only dimensionless scalar coefficients (F0, jitter, shimmer) are passed downstream to the weighted fusion aggregator.
+                </p>
+</div>
+</div>
+</div>
+</div>
+<!-- ==================== STEP 3: QUESTIONNAIRE & FUSION ==================== -->
+<div class="hidden flex-col gap-space-lg" id="wizard-step-3">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- 5 Domain Questionnaire Stack -->
+<div class="lg:col-span-8 flex flex-col gap-space-md">
+<div class="rounded-2xl apple-glass dark:bg-white/[0.04] bg-white/70 p-space-md lg:p-space-lg shadow-[0_8px_32px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)] border border-black/[0.05] dark:border-white/[0.08] relative overflow-hidden">
+<div class="absolute inset-x-0 top-0 h-10 specular-shine pointer-events-none"></div>
+<div class="flex flex-wrap items-center justify-between gap-space-sm mb-space-sm relative z-10">
+<div>
+<span class="font-label-mono-xs text-xs dark:text-rose-300 text-rose-700 uppercase tracking-wider font-bold">Validated Dimensional Psychometrics</span>
+<h2 class="font-headline-md text-xl lg:text-2xl font-bold dark:text-white text-slate-900 mt-0.5">Core Functional Domains (PHQ &amp; GAD Synthesis)</h2>
+</div>
+<div class="px-3 py-1.5 rounded-full dark:bg-white/[0.08] bg-slate-100 border border-black/[0.04] dark:border-white/[0.1] shadow-inner">
+<span class="font-label-mono-xs text-xs dark:text-rose-300 text-rose-700 font-bold" id="answered-badge">5 of 5 Evaluated</span>
+</div>
+</div>
+<p class="font-body-md text-sm dark:text-slate-300 text-slate-600 mb-space-md leading-relaxed">
+                  Rate your subjective experience over the past 14 days across the following physiological and cognitive vectors on a 5-point validated Likert matrix.
+                </p>
+<!-- 5-Point Likert Scale Card Stream -->
+<div class="space-y-space-sm" id="questions-matrix">
+<!-- Item 1 -->
+<div class="p-3.5 rounded-xl dark:bg-white/[0.03] bg-slate-50 border border-black/[0.04] dark:border-white/[0.06] flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-sm hover:dark:bg-white/[0.06] hover:bg-slate-100/80 transition-all">
+<div class="max-w-md">
+<div class="flex items-center gap-2">
+<span class="font-label-mono-xs text-xs dark:text-cyan-300 text-cyan-700 font-bold">01</span>
+<span class="font-headline-sm text-sm font-bold dark:text-white text-slate-900">Sleep Architecture Disruption</span>
+</div>
+<p class="font-body-sm text-xs dark:text-slate-400 text-slate-500 mt-0.5">Difficulty initiating or maintaining restorative REM sleep cycles.</p>
+</div>
+<div class="flex items-center gap-1.5 shrink-0">
+<button class="likert-1 px-3 py-1.5 rounded-full font-label-mono-xs text-xs dark:bg-white/[0.06] bg-white border border-black/[0.06] dark:border-white/[0.1] dark:text-slate-300 text-slate-700 transition-all" onclick="selectLikert(1, 1)" type="button">1</button>
+<button class="likert-1 px-3 py-1.5 rounded-full font-label-mono-xs text-xs dark:bg-white/[0.06] bg-white border border-black/[0.06] dark:border-white/[0.1] dark:text-slate-300 text-slate-700 transition-all" onclick="selectLikert(1, 2)" type="button">2</button>
+<button class="likert-1 px-3 py-1.5 rounded-full font-label-mono-xs text-xs dark:bg-white/[0.06] bg-white border border-black/[0.06] dark:border-white/[0.1] dark:text-slate-300 text-slate-700 transition-all" onclick="selectLikert(1, 3)" type="button">3</button>
+<button class="likert-1 px-3 py-1.5 rounded-full font-label-mono-xs text-xs bg-gradient-to-r from-cyan-400 to-teal-400 text-slate-950 font-bold shadow-[0_0_12px_rgba(0,245,255,0.4)]" onclick="selectLikert(1, 4)" type="button">4</button>
+<button class="likert-1 px-3 py-1.5 rounded-full font-label-mono-xs text-xs dark:bg-white/[0.06] bg-white border border-black/[0.06] dark:border-white/[0.1] dark:text-slate-300 text-slate-700 transition-all" onclick="selectLikert(1, 5)" type="button">5</button>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="p-3.5 rounded-xl dark:bg-white/[0.03] bg-slate-50 border border-black/[0.04] dark:border-white/[0.06] flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-sm hover:dark:bg-white/[0.06] hover:bg-slate-100/80 transition-all">
+<div class="max-w-md">
+<div class="flex items-center gap-2">
+<span class="font-label-mono-xs text-xs dark:text-cyan-300 text-cyan-700 font-bold">02</span>
+<span class="font-headline-sm text-sm font-bold dark:text-white text-slate-900">Daytime Somatic Fatigue</span>
+</div>
+<p class="font-body-sm text-xs dark:text-slate-400 text-slate-500 mt-0.5">Persistent bodily heaviness or drained energy independent of exertion.</p>
+</div>
+<div class="flex items-center gap-1.5 shrink-0">
+<button class="likert-2 px-3 py-1.5 rounded-full font-label-mono-xs text-xs dark:bg-white/[0.06] bg-white border border-black/[0.06] dark:border-white/[0.1] dark:text-slate-300 text-slate-700 transition-all" onclick="selectLikert(2, 1)" type="button">1</button>
+<button class="likert-2 px-3 py-1.5 rounded-full font-label-mono-xs text-xs dark:bg-white/[0.06] bg-white border border-black/[0.06] dark:border-white/[0.1] dark:text-slate-300 text-slate-700 transition-all" onclick="selectLikert(2, 2)" type="button">2</button>
+<button class="likert-2 px-3 py-1.5 rounded-full font-label-mono-xs text-xs bg-gradient-to-r from-cyan-400 to-teal-400 text-slate-950 font-bold shadow-[0_0_12px_rgba(0,245,255,0.4)]" onclick="selectLikert(2, 3)" type="button">3</button>
+<button class="likert-2 px-3 py-1.5 rounded-full font-label-mono-xs text-xs dark:bg-white/[0.06] bg-white border border-black/[0.06] dark:border-white/[0.1] dark:text-slate-300 text-slate-700 transition-all" onclick="selectLikert(2, 4)" type="button">4</button>
+<button class="likert-2 px-3 py-1.5 rounded-full font-label-mono-xs text-xs dark:bg-white/[0.06] bg-white border border-black/[0.06] dark:border-white/[0.1] dark:text-slate-300 text-slate-700 transition-all" onclick="selectLikert(2, 5)" type="button">5</button>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="p-3.5 rounded-xl dark:bg-white/[0.03] bg-slate-50 border border-black/[0.04] dark:border-white/[0.06] flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-sm hover:dark:bg-white/[0.06] hover:bg-slate-100/80 transition-all">
+<div class="max-w-md">
+<div class="flex items-center gap-2">
+<span class="font-label-mono-xs text-xs dark:text-cyan-300 text-cyan-700 font-bold">03</span>
+<span class="font-headline-sm text-sm font-bold dark:text-white text-slate-900">Cognitive Task Overwhelm</span>
+</div>
+<p class="font-body-sm text-xs dark:text-slate-400 text-slate-500 mt-0.5">Feeling paralyzed when confronted with multi-step administrative or daily work.</p>
+</div>
+<div class="flex items-center gap-1.5 shrink-0">
+<button class="likert-3 px-3 py-1.5 rounded-full font-label-mono-xs text-xs dark:bg-white/[0.06] bg-white border border-black/[0.06] dark:border-white/[0.1] dark:text-slate-300 text-slate-700 transition-all" onclick="selectLikert(3, 1)" type="button">1</button>
+<button class="likert-3 px-3 py-1.5 rounded-full font-label-mono-xs text-xs dark:bg-white/[0.06] bg-white border border-black/[0.06] dark:border-white/[0.1] dark:text-slate-300 text-slate-700 transition-all" onclick="selectLikert(3, 2)" type="button">2</button>
+<button class="likert-3 px-3 py-1.5 rounded-full font-label-mono-xs text-xs dark:bg-white/[0.06] bg-white border border-black/[0.06] dark:border-white/[0.1] dark:text-slate-300 text-slate-700 transition-all" onclick="selectLikert(3, 3)" type="button">3</button>
+<button class="likert-3 px-3 py-1.5 rounded-full font-label-mono-xs text-xs bg-gradient-to-r from-cyan-400 to-teal-400 text-slate-950 font-bold shadow-[0_0_12px_rgba(0,245,255,0.4)]" onclick="selectLikert(3, 4)" type="button">4</button>
+<button class="likert-3 px-3 py-1.5 rounded-full font-label-mono-xs text-xs dark:bg-white/[0.06] bg-white border border-black/[0.06] dark:border-white/[0.1] dark:text-slate-300 text-slate-700 transition-all" onclick="selectLikert(3, 5)" type="button">5</button>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="p-3.5 rounded-xl dark:bg-white/[0.03] bg-slate-50 border border-black/[0.04] dark:border-white/[0.06] flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-sm hover:dark:bg-white/[0.06] hover:bg-slate-100/80 transition-all">
+<div class="max-w-md">
+<div class="flex items-center gap-2">
+<span class="font-label-mono-xs text-xs dark:text-cyan-300 text-cyan-700 font-bold">04</span>
+<span class="font-headline-sm text-sm font-bold dark:text-white text-slate-900">Concentration Drift &amp; Focus Fog</span>
+</div>
+<p class="font-body-sm text-xs dark:text-slate-400 text-slate-500 mt-0.5">Difficulty maintaining working memory and linear conversational focus.</p>
+</div>
+<div class="flex items-center gap-1.5 shrink-0">
+<button class="likert-4 px-3 py-1.5 rounded-full font-label-mono-xs text-xs dark:bg-white/[0.06] bg-white border border-black/[0.06] dark:border-white/[0.1] dark:text-slate-300 text-slate-700 transition-all" onclick="selectLikert(4, 1)" type="button">1</button>
+<button class="likert-4 px-3 py-1.5 rounded-full font-label-mono-xs text-xs dark:bg-white/[0.06] bg-white border border-black/[0.06] dark:border-white/[0.1] dark:text-slate-300 text-slate-700 transition-all" onclick="selectLikert(4, 2)" type="button">2</button>
+<button class="likert-4 px-3 py-1.5 rounded-full font-label-mono-xs text-xs bg-gradient-to-r from-cyan-400 to-teal-400 text-slate-950 font-bold shadow-[0_0_12px_rgba(0,245,255,0.4)]" onclick="selectLikert(4, 3)" type="button">3</button>
+<button class="likert-4 px-3 py-1.5 rounded-full font-label-mono-xs text-xs dark:bg-white/[0.06] bg-white border border-black/[0.06] dark:border-white/[0.1] dark:text-slate-300 text-slate-700 transition-all" onclick="selectLikert(4, 4)" type="button">4</button>
+<button class="likert-4 px-3 py-1.5 rounded-full font-label-mono-xs text-xs dark:bg-white/[0.06] bg-white border border-black/[0.06] dark:border-white/[0.1] dark:text-slate-300 text-slate-700 transition-all" onclick="selectLikert(4, 5)" type="button">5</button>
+</div>
+</div>
+<!-- Item 5 -->
+<div class="p-3.5 rounded-xl dark:bg-white/[0.03] bg-slate-50 border border-black/[0.04] dark:border-white/[0.06] flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-sm hover:dark:bg-white/[0.06] hover:bg-slate-100/80 transition-all">
+<div class="max-w-md">
+<div class="flex items-center gap-2">
+<span class="font-label-mono-xs text-xs dark:text-cyan-300 text-cyan-700 font-bold">05</span>
+<span class="font-headline-sm text-sm font-bold dark:text-white text-slate-900">Emotional Rebound &amp; Resilience</span>
+</div>
+<p class="font-body-sm text-xs dark:text-slate-400 text-slate-500 mt-0.5">Capacity to recover emotional composure following minor unforeseen stressors.</p>
+</div>
+<div class="flex items-center gap-1.5 shrink-0">
+<button class="likert-5 px-3 py-1.5 rounded-full font-label-mono-xs text-xs dark:bg-white/[0.06] bg-white border border-black/[0.06] dark:border-white/[0.1] dark:text-slate-300 text-slate-700 transition-all" onclick="selectLikert(5, 1)" type="button">1</button>
+<button class="likert-5 px-3 py-1.5 rounded-full font-label-mono-xs text-xs bg-gradient-to-r from-cyan-400 to-teal-400 text-slate-950 font-bold shadow-[0_0_12px_rgba(0,245,255,0.4)]" onclick="selectLikert(5, 2)" type="button">2</button>
+<button class="likert-5 px-3 py-1.5 rounded-full font-label-mono-xs text-xs dark:bg-white/[0.06] bg-white border border-black/[0.06] dark:border-white/[0.1] dark:text-slate-300 text-slate-700 transition-all" onclick="selectLikert(5, 3)" type="button">3</button>
+<button class="likert-5 px-3 py-1.5 rounded-full font-label-mono-xs text-xs dark:bg-white/[0.06] bg-white border border-black/[0.06] dark:border-white/[0.1] dark:text-slate-300 text-slate-700 transition-all" onclick="selectLikert(5, 4)" type="button">4</button>
+<button class="likert-5 px-3 py-1.5 rounded-full font-label-mono-xs text-xs dark:bg-white/[0.06] bg-white border border-black/[0.06] dark:border-white/[0.1] dark:text-slate-300 text-slate-700 transition-all" onclick="selectLikert(5, 5)" type="button">5</button>
+</div>
+</div>
+</div>
+<!-- Back Controls -->
+<div class="pt-space-md mt-space-md flex items-center justify-between border-t border-black/[0.05] dark:border-white/[0.08]">
+<button class="px-5 py-2.5 rounded-full dark:bg-white/[0.06] bg-slate-100 hover:bg-slate-200 dark:hover:bg-white/[0.12] dark:text-slate-300 text-slate-700 font-body-sm text-xs font-semibold transition-all border border-black/[0.05] dark:border-white/[0.08] flex items-center gap-1.5" onclick="setWizardStep(2)">
+<span class="material-symbols-outlined text-sm">arrow_back</span> Back to Voice Acoustic
+                  </button>
+<span class="font-label-mono-xs text-xs dark:text-slate-400 text-slate-500">1 = Never / Minimal • 5 = Severe / Continuous</span>
+</div>
+</div>
+</div>
+<!-- Synthesis Readiness Panel & Multimodal Formula Visual -->
+<div class="lg:col-span-4 flex flex-col gap-space-md">
+<div class="p-space-md rounded-2xl apple-glass dark:bg-white/[0.04] bg-white/70 border border-black/[0.05] dark:border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)] relative overflow-hidden">
+<div class="absolute inset-x-0 top-0 h-10 specular-shine pointer-events-none"></div>
+<span class="font-label-mono-xs text-xs dark:text-cyan-300 text-cyan-700 uppercase tracking-widest font-bold block mb-1">Pipeline Diagnostics</span>
+<h3 class="font-headline-sm text-lg font-bold dark:text-white text-slate-900 mb-space-sm">Synthesis Readiness</h3>
+<div class="space-y-space-sm mb-space-md">
+<!-- Item Text -->
+<div class="flex items-center justify-between p-3 rounded-xl dark:bg-white/[0.04] bg-slate-50 border border-black/[0.04] dark:border-white/[0.06]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-cyan-500 text-base">check_circle</span>
+<span class="font-body-md text-sm font-semibold dark:text-white text-slate-800">Text Modality</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-mono-xs text-xs dark:text-cyan-300 text-cyan-700 font-bold">Ready</span>
+<span class="px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 font-label-mono-xs text-[11px] font-bold">40%</span>
+</div>
+</div>
+<!-- Item Voice -->
+<div class="flex items-center justify-between p-3 rounded-xl dark:bg-white/[0.04] bg-slate-50 border border-black/[0.04] dark:border-white/[0.06]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-purple-500 text-base">check_circle</span>
+<span class="font-body-md text-sm font-semibold dark:text-white text-slate-800">Voice Acoustic</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-mono-xs text-xs text-purple-600 dark:text-purple-300 font-bold">Ready</span>
+<span class="px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-600 dark:text-purple-300 font-label-mono-xs text-[11px] font-bold">30%</span>
+</div>
+</div>
+<!-- Item Questionnaire -->
+<div class="flex items-center justify-between p-3 rounded-xl dark:bg-white/[0.04] bg-slate-50 border border-black/[0.04] dark:border-white/[0.06]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-rose-500 text-base">check_circle</span>
+<span class="font-body-md text-sm font-semibold dark:text-white text-slate-800">Clinical Scale</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-mono-xs text-xs text-rose-600 dark:text-rose-300 font-bold">5/5 Answered</span>
+<span class="px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-300 font-label-mono-xs text-[11px] font-bold">30%</span>
+</div>
+</div>
+</div>
+<!-- Mathematical Formula Matrix Card -->
+<div class="p-3.5 rounded-xl dark:bg-black/40 bg-white border border-black/[0.06] dark:border-white/[0.08] shadow-inner mb-space-md">
+<span class="font-label-mono-xs text-[11px] dark:text-slate-400 text-slate-500 uppercase tracking-wider block mb-1 font-bold">Fusion Formula Visualizer</span>
+<div class="font-label-mono text-xs dark:text-slate-200 text-slate-800 leading-relaxed font-semibold">
+<span class="text-rose-500 dark:text-rose-300 font-bold">Index</span> = 
+                    (<span class="text-cyan-500 dark:text-cyan-300">Text</span> × 0.40) + 
+                    (<span class="text-purple-500 dark:text-purple-300">Voice</span> × 0.30) + 
+                    (<span class="text-rose-500 dark:text-rose-300">Survey</span> × 0.30)
+                  </div>
+<div class="mt-2 text-slate-500 dark:text-slate-400 font-label-mono-xs text-[10px] leading-tight">
+                    Weighted harmonic mean with cross-entropy penalization for discordant modalities.
+                  </div>
+</div>
+<!-- Glowing Synthesis CTA Button -->
+<button class="relative overflow-hidden w-full flex items-center justify-center gap-2 px-space-md py-4 rounded-full bg-gradient-to-r from-cyan-400 via-teal-400 to-purple-500 text-slate-950 font-headline-sm text-sm font-extrabold shadow-[0_4px_28px_rgba(0,245,255,0.45)] hover:shadow-[0_6px_36px_rgba(0,245,255,0.7)] hover:scale-[1.02] active:scale-[0.98] transition-all sheen-active" id="calculate-btn" onclick="executeSynthesisCalculation()">
+<span class="material-symbols-outlined text-xl" id="calc-spinner">insights</span>
+<span id="calc-label">Calculate Final Multimodal Indicator</span>
+</button>
+</div>
+<!-- Estimated Composite Outcome Box -->
+<div class="p-space-md rounded-2xl apple-glass dark:bg-white/[0.08] bg-white/90 border border-cyan-400/40 shadow-2xl relative overflow-hidden hidden transition-all" id="result-summary-card">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-mono-xs text-xs dark:text-cyan-300 text-cyan-700 uppercase tracking-widest font-bold">Synthesis Output</span>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-rose-500/15 text-rose-600 dark:text-rose-300 font-label-mono-xs text-[11px] font-bold border border-rose-500/20">
+                    Elevated Risk
+                  </span>
+</div>
+<div class="flex items-baseline gap-2 mb-2">
+<span class="font-data-metric-lg text-4xl lg:text-5xl font-extrabold text-cyan-600 dark:text-cyan-300 tracking-tight">64.8</span>
+<span class="font-headline-sm text-lg dark:text-slate-400 text-slate-500 font-semibold">/ 100</span>
+</div>
+<p class="font-body-sm text-xs dark:text-slate-300 text-slate-600 mb-space-sm leading-relaxed">
+                  Significant divergence detected between acoustic stress markers and subjective self-reporting. Mild-to-moderate executive burnout pattern identified.
+                </p>
+<div class="pt-2 border-t border-black/[0.05] dark:border-white/[0.08] flex items-center justify-between">
+<a class="font-label-mono-xs text-xs dark:text-cyan-300 text-cyan-700 font-bold hover:underline flex items-center gap-1" data-path="dashboard" href="#">
+                    View Full Longitudinal Insight <span class="material-symbols-outlined text-xs">open_in_new</span>
+</a>
+<span class="font-label-mono-xs text-[10px] dark:text-slate-400 text-slate-500">P &lt; 0.001 Confidence</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+    // Theme Switcher Implementation
+    function toggleTheme() {
+      const html = document.documentElement;
+      if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        html.classList.add('light');
+        localStorage.setItem('mg-theme', 'light');
+      } else {
+        html.classList.remove('light');
+        html.classList.add('dark');
+        localStorage.setItem('mg-theme', 'dark');
+      }
+    }
+
+    // Initialize saved preference
+    (function initTheme() {
+      const savedTheme = localStorage.getItem('mg-theme');
+      if (savedTheme === 'light') {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+      } else {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+      }
+    })();
+
+    let currentStep = 1;
+    let isRecording = false;
+    let recordingInterval = null;
+    let recordingSeconds = 0;
+
+    function setWizardStep(step) {
+      currentStep = step;
+      
+      // Toggle steps
+      document.getElementById('wizard-step-1').classList.add('hidden');
+      document.getElementById('wizard-step-2').classList.add('hidden');
+      document.getElementById('wizard-step-3').classList.add('hidden');
+      document.getElementById('wizard-step-' + step).classList.remove('hidden');
+
+      // Update progress dial
+      const stepperDial = document.getElementById('stepper-dial');
+      const indicatorText = document.getElementById('wizard-step-indicator-text');
+      const progressBar = document.getElementById('wizard-progress-bar');
+      
+      if (step === 1) {
+        stepperDial.setAttribute('stroke-dashoffset', '75');
+        indicatorText.textContent = '1/3';
+        progressBar.style.width = '33.33%';
+      } else if (step === 2) {
+        stepperDial.setAttribute('stroke-dashoffset', '38');
+        indicatorText.textContent = '2/3';
+        progressBar.style.width = '66.66%';
+      } else {
+        stepperDial.setAttribute('stroke-dashoffset', '0');
+        indicatorText.textContent = '3/3';
+        progressBar.style.width = '100%';
+      }
+
+      // Update Stepper Navigation styling
+      for (let i = 1; i <= 3; i++) {
+        const btn = document.getElementById('step-nav-btn-' + i);
+        const badge = document.getElementById('step-nav-badge-' + i);
+        const weight = document.getElementById('step-nav-weight-' + i);
+        const title = document.getElementById('step-nav-title-' + i);
+        const check = document.getElementById('step-check-' + i);
+
+        if (i === step) {
+          btn.className = "group relative flex items-center justify-between p-3.5 rounded-xl transition-all duration-300 text-left dark:bg-white/[0.12] bg-white border border-cyan-400/40 dark:border-cyan-400/30 shadow-[0_4px_20px_rgba(0,245,255,0.15)] ring-1 ring-cyan-400/30";
+          badge.className = "w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-400 to-cyan-300 text-slate-950 flex items-center justify-center font-label-mono font-bold text-xs shadow-[0_0_12px_rgba(0,245,255,0.4)]";
+          weight.className = "block font-label-mono-xs text-[10px] uppercase tracking-widest text-cyan-600 dark:text-cyan-300 font-semibold";
+          title.className = "block font-headline-sm text-sm font-bold dark:text-white text-slate-900";
+          check.className = "material-symbols-outlined text-cyan-500 dark:text-primary-container";
+        } else {
+          btn.className = "group relative flex items-center justify-between p-3.5 rounded-xl transition-all duration-300 text-left dark:bg-white/[0.03] bg-white/40 hover:bg-white/80 dark:hover:bg-white/[0.08] border border-black/[0.04] dark:border-white/[0.06]";
+          badge.className = "w-8 h-8 rounded-lg dark:bg-white/[0.08] bg-slate-200 dark:text-slate-300 text-slate-700 flex items-center justify-center font-label-mono font-bold text-xs";
+          weight.className = "block font-label-mono-xs text-[10px] uppercase tracking-widest dark:text-slate-400 text-slate-500 font-semibold";
+          title.className = "block font-headline-sm text-sm font-bold dark:text-slate-300 text-slate-700";
+          check.className = "material-symbols-outlined dark:text-slate-500 text-slate-400";
+        }
+      }
+    }
+
+    function saveAndProceed(fromStep, toStep) {
+      setWizardStep(toStep);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function skipToStep(step) {
+      setWizardStep(step);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Textarea metrics update
+    function updateJournalMetrics(textarea) {
+      const text = textarea.value;
+      const charCount = text.length;
+      const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+
+      document.getElementById('char-counter').textContent = charCount;
+      document.getElementById('word-counter').textContent = words;
+
+      if (words > 20) {
+        document.getElementById('live-density-badge').textContent = 'Lexical: 0.81';
+        document.getElementById('top-nlp-status').textContent = 'Vector Extracted';
+        document.getElementById('metric-valence').textContent = '-0.68';
+      }
+    }
+
+    function clearJournal() {
+      const el = document.getElementById('journal-input');
+      el.value = '';
+      updateJournalMetrics(el);
+    }
+
+    function insertSampleText(type) {
+      const el = document.getElementById('journal-input');
+      let sample = '';
+      if (type === 'Work Overwhelm') {
+        sample = "I've felt completely inundated by the volume of rapid-fire context switches at work this week. Even simple code reviews and sprint planning feel like monumental cognitive hurdles. I constantly have a background sensation that something critical is slipping through the cracks, leading to continuous shallow breathing.";
+      } else if (type === 'Sleep Anxiety') {
+        sample = "I wake up every morning around 3:30 AM with a racing pulse. I turn over repeatedly trying to empty my mind, but intrusive anticipatory fears keep cycling through my thoughts until sunlight arrives. My physical body feels exhausted yet intensely wired.";
+      } else if (type === 'Social Burnout') {
+        sample = "Interacting with colleagues and responding to friends feels entirely draining. I find myself postponing replies for days, dreading small talk, and desperately craving pitch-black solitary recovery time.";
+      } else if (type === 'Morning Clarity') {
+        sample = "After 8 continuous hours of uninterrupted sleep, my thought sequences feel structured, peaceful, and sharp. Motivation to tackle complex engineering tasks is high and resting heart rate feels calm.";
+      }
+      el.value = sample;
+      updateJournalMetrics(el);
+    }
+
+    // Voice Simulation Behavior
+    function toggleAudioRecording() {
+      isRecording = !isRecording;
+      const btnText = document.getElementById('record-btn-text');
+      const btnIcon = document.getElementById('record-btn-icon');
+      const statusChip = document.getElementById('audio-engine-state');
+      const timerText = document.getElementById('recording-timer');
+      const bars = document.querySelectorAll('#waveform-container span');
+
+      if (isRecording) {
+        recordingSeconds = 0;
+        btnText.textContent = 'Stop Recording (Capturing...)';
+        btnIcon.textContent = 'stop_circle';
+        statusChip.textContent = 'Streaming 48kHz PCM';
+        statusChip.className = 'font-label-mono-xs text-xs text-purple-400 font-bold';
+        document.getElementById('top-voice-status').textContent = 'Microphone Live';
+
+        recordingInterval = setInterval(() => {
+          recordingSeconds++;
+          const s = recordingSeconds < 10 ? '0' + recordingSeconds : recordingSeconds;
+          timerText.textContent = '00:' + s + ' / 00:15';
+
+          bars.forEach(b => {
+            const randH = Math.floor(Math.random() * 80) + 16;
+            b.style.height = randH + 'px';
+          });
+
+          if (recordingSeconds >= 15) {
+            toggleAudioRecording();
+          }
+        }, 1000);
+      } else {
+        clearInterval(recordingInterval);
+        btnText.textContent = 'Re-record Speech Sample';
+        btnIcon.textContent = 'mic';
+        statusChip.textContent = 'Acoustic Vector Generated';
+        statusChip.className = 'font-label-mono-xs text-xs text-teal-400 font-bold';
+        document.getElementById('top-voice-status').textContent = 'Sample Ready';
+        timerText.textContent = '00:15 / 00:15 Completed';
+      }
+    }
+
+    function simulateAudioClip() {
+      const statusChip = document.getElementById('audio-engine-state');
+      statusChip.textContent = 'Clinical Benchmark Loaded (15s)';
+      statusChip.className = 'font-label-mono-xs text-xs text-cyan-400 font-bold';
+      document.getElementById('metric-jitter').textContent = '0.94%';
+      document.getElementById('metric-shimmer').textContent = '2.10%';
+      document.getElementById('metric-hnr').textContent = '22.4 dB';
+      document.getElementById('top-voice-status').textContent = 'Synthetic Benchmark Ready';
+      document.getElementById('recording-timer').textContent = '00:15 / 00:15 (Demo)';
+    }
+
+    // Questionnaire Likert handler
+    function selectLikert(qNum, value) {
+      const buttons = document.querySelectorAll('.likert-' + qNum);
+      buttons.forEach((btn, index) => {
+        if (index + 1 === value) {
+          btn.className = 'likert-' + qNum + ' px-3 py-1.5 rounded-full font-label-mono-xs text-xs bg-gradient-to-r from-cyan-400 to-teal-400 text-slate-950 font-bold shadow-[0_0_12px_rgba(0,245,255,0.4)]';
+        } else {
+          btn.className = 'likert-' + qNum + ' px-3 py-1.5 rounded-full font-label-mono-xs text-xs dark:bg-white/[0.06] bg-white border border-black/[0.06] dark:border-white/[0.1] dark:text-slate-300 text-slate-700 transition-all';
+        }
+      });
+    }
+
+    // Calculate final synthesis
+    function executeSynthesisCalculation() {
+      const btn = document.getElementById('calculate-btn');
+      const label = document.getElementById('calc-label');
+      const spinner = document.getElementById('calc-spinner');
+      const resultCard = document.getElementById('result-summary-card');
+
+      label.textContent = 'Synthesizing Multimodal Tensors...';
+      spinner.textContent = 'autorenew';
+      spinner.classList.add('animate-spin');
+
+      setTimeout(() => {
+        spinner.classList.remove('animate-spin');
+        spinner.textContent = 'verified';
+        label.textContent = 'Synthesis Complete';
+        resultCard.classList.remove('hidden');
+        resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 1200);
+    }
+  </script>
+</body></html>

@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>
+  @layer base {
+    html, body { margin:0; padding:0; }
+    body { overscroll-behavior: none; }
+    main > :first-child { margin-top:0!important; }
+    main > :last-child { margin-bottom:0!important; }
+  }
+  ::-webkit-scrollbar { display:none; }
+
+  /* Vision Pro Frosted Glass Tokens */
+  .vision-glass {
+    backdrop-filter: blur(28px) saturate(190%);
+    -webkit-backdrop-filter: blur(28px) saturate(190%);
+  }
+  .dark .vision-glass {
+    background: rgba(18, 21, 31, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  }
+  html:not(.dark) .vision-glass {
+    background: rgba(255, 255, 255, 0.76);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03), inset 0 1px 1px rgba(255, 255, 255, 0.95);
+  }
+
+  .vision-glass-subtle {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  .dark .vision-glass-subtle {
+    background: rgba(24, 28, 42, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  }
+  html:not(.dark) .vision-glass-subtle {
+    background: rgba(243, 246, 252, 0.82);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  }
+
+  .dark .text-adaptive-main { color: #f1f5f9; }
+  html:not(.dark) .text-adaptive-main { color: #0f172a; }
+
+  .dark .text-adaptive-muted { color: #94a3b8; }
+  html:not(.dark) .text-adaptive-muted { color: #475569; }
+
+  .dark .text-adaptive-faint { color: #64748b; }
+  html:not(.dark) .text-adaptive-faint { color: #94a3b8; }
+
+  .dark .bg-adaptive-lowest { background-color: rgba(12, 14, 21, 0.85); }
+  html:not(.dark) .bg-adaptive-lowest { background-color: rgba(248, 250, 252, 0.92); }
+
+  .dark .bg-adaptive-canvas { background: #0c0e15; }
+  html:not(.dark) .bg-adaptive-canvas { background: #f1f5f9; }
+</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-secondary-container": "#d0a6ff", "primary": "#e9feff", "on-surface": "#e1e2ed", "on-error-container": "#ffdad6", "surface-dim": "#11131b", "inverse-primary": "#00696e", "tertiary-fixed-dim": "#ffb2ba", "on-tertiary-fixed": "#400011", "tertiary": "#fff9f8", "on-background": "#e1e2ed", "on-secondary-fixed-variant": "#6600b7", "primary-container": "#00f5ff", "surface": "#11131b", "on-tertiary": "#670020", "surface-bright": "#373941", "surface-container-highest": "#32343d", "on-secondary": "#470083", "on-primary-container": "#006c71", "primary-fixed": "#63f7ff", "background": "#11131b", "surface-container": "#1d1f27", "surface-tint": "#00dce5", "tertiary-fixed": "#ffd9dc", "tertiary-container": "#ffd3d6", "surface-container-lowest": "#0c0e15", "error": "#ffb4ab", "on-primary-fixed": "#002021", "surface-variant": "#32343d", "primary-fixed-dim": "#00dce5", "secondary-container": "#6807ba", "on-tertiary-container": "#c30044", "on-secondary-fixed": "#2b0052", "outline-variant": "#3a494a", "on-primary": "#003739", "on-tertiary-fixed-variant": "#910030", "error-container": "#93000a", "on-primary-fixed-variant": "#004f53", "on-surface-variant": "#b9caca", "inverse-surface": "#e1e2ed", "secondary-fixed": "#efdbff", "inverse-on-surface": "#2e3038", "secondary": "#dbb8ff", "secondary-fixed-dim": "#dbb8ff", "surface-container-low": "#191b23", "outline": "#849495", "on-error": "#690005", "surface-container-high": "#272a32" }, "borderRadius": { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" }, "spacing": { "space-lg": "1.5rem", "gutter": "1.5rem", "space-md": "1rem", "space-sm": "0.5rem", "space-xl": "2.5rem", "space-xs": "0.25rem", "gutter-mobile": "0.75rem", "margin": "3rem", "margin-mobile": "1rem" }, "fontFamily": { "data-metric-lg": ["Manrope"], "data-metric-md": ["Manrope"], "label-mono-xs": ["JetBrains Mono"], "body-md": ["Manrope"], "headline-lg-mobile": ["Manrope"], "headline-lg": ["Manrope"], "body-sm": ["Manrope"], "display-hero": ["Manrope"], "headline-sm": ["Manrope"], "headline-md": ["Manrope"], "label-mono": ["JetBrains Mono"], "display-hero-mobile": ["Manrope"], "body-lg": ["Manrope"] }, "fontSize": { "data-metric-lg": ["48px", { "lineHeight": "52px", "letterSpacing": "-0.03em", "fontWeight": "700" }], "data-metric-md": ["28px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "label-mono-xs": ["10px", { "lineHeight": "14px", "letterSpacing": "0.08em", "fontWeight": "500" }], "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-lg-mobile": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "headline-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "400" }], "display-hero": ["56px", { "lineHeight": "64px", "letterSpacing": "-0.03em", "fontWeight": "700" }], "headline-sm": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "label-mono": ["12px", { "lineHeight": "16px", "letterSpacing": "0.06em", "fontWeight": "500" }], "display-hero-mobile": ["38px", { "lineHeight": "44px", "letterSpacing": "-0.025em", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "400" }] } } } };</script></head><body class="bg-slate-50 dark:bg-background font-body-md text-slate-900 dark:text-on-surface min-h-screen relative overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container transition-colors duration-300"><!-- Ambient Spatial Background Lights -->
+<div class="fixed inset-0 pointer-events-none z-0 overflow-hidden"><div class="absolute -top-[15%] -left-[10%] w-[55vw] h-[55vw] rounded-full bg-[radial-gradient(circle,rgba(0,245,255,0.08)_0%,transparent_70%)] dark:bg-[radial-gradient(circle,rgba(0,245,255,0.06)_0%,transparent_70%)] blur-3xl"></div><div class="absolute top-[35%] -right-[15%] w-[60vw] h-[60vw] rounded-full bg-[radial-gradient(circle,rgba(147,51,234,0.09)_0%,transparent_70%)] dark:bg-[radial-gradient(circle,rgba(104,7,186,0.08)_0%,transparent_70%)] blur-3xl"></div><div class="absolute -bottom-[20%] left-[20%] w-[50vw] h-[50vw] rounded-full bg-[radial-gradient(circle,rgba(0,220,229,0.06)_0%,transparent_70%)] dark:bg-[radial-gradient(circle,rgba(0,108,113,0.05)_0%,transparent_70%)] blur-3xl"></div><div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(100,116,139,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(100,116,139,0.04)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:4rem_4rem]"></div></div><header class="fixed top-0 inset-x-0 h-16 z-50 vision-glass border-b border-white/40 dark:border-white/10 shadow-lg"><div class="w-full h-16 px-space-md lg:px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md shrink-0"><div class="relative flex items-center justify-center"><div class="absolute inset-0 rounded-full bg-cyan-400/25 blur-md animate-pulse"></div><img alt="MindGuard AI Holographic Shield Emblem" class="relative h-8 w-auto object-contain drop-shadow" src="https://lh3.googleusercontent.com/aida/AEtjO1Xp-WHawfQ2KgNXOi-uZpi_M1DAGYxazrfZjO9WGWH9PIIXDKRV-zvRzL22ioml5Y9qFeYTSBzDEmneObpYE8_E5Rly74cOyOBSeHtrspkSnpH9eSCNZkv5DbKReHUGRaPRiQQEG-DU0twMVfBmy_ud2SHM9G_fdCAHok3-ID6b1Aka-EFYTmEU_dOtWEGLZFGb-z4YTd_Ybu8yfN9VkNMZkDRydlE8YWdklgoVOGfPwQlH8E-rCGHBNQ"/></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-slate-900 dark:text-primary tracking-tight leading-none font-bold">MindGuard AI</span><span class="font-label-mono-xs text-label-mono-xs text-cyan-600 dark:text-primary-fixed-dim uppercase tracking-wider mt-0.5 font-semibold">v2.4 Multimodal Neural</span></div></div><div class="hidden xl:flex items-center gap-space-sm"><div class="flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-slate-200/60 dark:bg-surface-container/60 shadow-inner"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-500 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span></span><span class="font-label-mono-xs text-label-mono-xs font-semibold text-cyan-700 dark:text-primary-fixed">API Live</span><span class="font-label-mono-xs text-label-mono-xs text-slate-500 dark:text-on-surface-variant/60">â€¢ 12ms</span></div><nav class="flex items-center gap-1 px-space-xs py-1 rounded-full bg-slate-200/50 dark:bg-surface-container-low/50 p-1"><a class="px-3 py-1 rounded-full font-body-sm text-body-sm text-slate-600 dark:text-on-surface-variant hover:text-slate-900 dark:hover:text-on-surface hover:bg-white/60 dark:hover:bg-surface-container transition-all" data-path="assessment-wizard" href="#">Assessment Wizard</a><a class="px-3 py-1 rounded-full font-body-sm text-body-sm text-slate-600 dark:text-on-surface-variant hover:text-slate-900 dark:hover:text-on-surface hover:bg-white/60 dark:hover:bg-surface-container transition-all" data-path="text-nlp" href="#">Text NLP</a><a aria-current="page" class="px-3 py-1 rounded-full font-body-sm transition-all bg-white dark:bg-surface-container-high text-cyan-600 dark:text-primary font-semibold shadow-sm dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]" data-path="voice-lab" href="#">Voice Lab</a><a class="px-3 py-1 rounded-full font-body-sm text-body-sm text-slate-600 dark:text-on-surface-variant hover:text-slate-900 dark:hover:text-on-surface hover:bg-white/60 dark:hover:bg-surface-container transition-all" data-path="questionnaire" href="#">Questionnaire</a><a class="px-3 py-1 rounded-full font-body-sm text-body-sm text-slate-600 dark:text-on-surface-variant hover:text-slate-900 dark:hover:text-on-surface hover:bg-white/60 dark:hover:bg-surface-container transition-all" data-path="model-stats" href="#">Model Stats</a></nav></div><div class="flex items-center gap-space-sm shrink-0"><!-- Apple-style Light/Dark Mode Switcher Pill -->
+<button aria-label="Toggle theme mode" class="relative flex items-center p-1 rounded-full bg-slate-200/80 dark:bg-surface-container-high/80 border border-white/60 dark:border-white/10 shadow-inner transition-all hover:scale-105 active:scale-95" id="theme-toggle-btn" title="Toggle Light / Spatial Dark Mode">
+<div class="flex items-center gap-1 px-1">
+<span class="flex items-center justify-center w-6 h-6 rounded-full transition-all text-xs text-amber-500 dark:text-slate-400" id="sun-icon"><span class="material-symbols-outlined text-[16px]">light_mode</span></span>
+<span class="flex items-center justify-center w-6 h-6 rounded-full transition-all text-xs text-slate-400 dark:text-cyan-300" id="moon-icon"><span class="material-symbols-outlined text-[16px]">dark_mode</span></span>
+</div>
+<span class="absolute top-1 left-1 dark:left-7 w-6 h-6 rounded-full bg-white dark:bg-surface-bright shadow-md transition-all duration-300 pointer-events-none opacity-80"></span>
+</button>
+<button class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-200/70 dark:bg-surface-container/80 hover:bg-white dark:hover:bg-surface-container-high text-slate-700 dark:text-on-surface-variant hover:text-slate-900 dark:hover:text-on-surface transition-all font-label-mono-xs text-label-mono-xs border border-white/40 dark:border-white/5"><span class="material-symbols-outlined text-sm text-purple-600 dark:text-secondary-fixed-dim">verified_user</span><span>Academic Non-Diagnostic</span></button><a class="flex items-center gap-1.5 px-space-md py-1.5 rounded-full bg-gradient-to-r from-cyan-500 to-teal-400 dark:from-primary-container dark:to-surface-tint text-slate-950 dark:text-on-primary font-headline-sm text-body-sm font-semibold tracking-wide shadow-[0_0_20px_rgba(0,245,255,0.35)] hover:shadow-[0_0_28px_rgba(0,245,255,0.55)] hover:-translate-y-0.5 transition-all" data-path="assessment-wizard" href="#"><span class="material-symbols-outlined text-base">add_chart</span><span class="hidden md:inline">New Assessment</span></a><div class="h-8 w-[1px] bg-slate-300 dark:bg-outline-variant/30 hidden sm:block"></div><div class="relative"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-cyan-500/40 p-0.5 bg-slate-100 dark:bg-surface-container" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTpnZYR5-tD15-1-BGkPQ6GfIG7WLfO5mIhYzruIJsFQJKmLMpI-IcASC2L18Yw8A5BCk5if4PfzOSFUYXt4mx9dgjeRiafkTRKnLrdRjOrlII-SpjpsUFv8xiYpxeEf65Ya2F_O-jomlQ0cnD_6nlMNruw40yu0U84nAQGNkhbqQHrMMFMqXKZXBFOxZiI4tLzMPdsmR4IF8AekB3QViMBkbjSgUp6nFdTjnAZoFQt7rTjRBnkahg"/><span class="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-cyan-500 ring-2 ring-white dark:ring-surface-container-lowest"></span></div></div></div></header><aside class="fixed left-0 top-0 h-full w-64 vision-glass border-r border-white/40 dark:border-white/10 z-40 flex flex-col pt-20 pb-space-md shadow-xl"><div class="px-space-md py-space-xs mb-space-xs"><span class="font-label-mono-xs text-label-mono-xs text-slate-500 dark:text-outline tracking-widest uppercase font-semibold">Neural Streams</span></div><nav class="flex-1 px-space-sm space-y-1 overflow-y-auto"><a class="flex items-center gap-3 px-space-md py-2.5 rounded-xl text-slate-600 dark:text-on-surface-variant hover:bg-white/60 dark:hover:bg-surface-container hover:text-slate-900 dark:hover:text-on-surface transition-all" data-path="dashboard" href="#"><span class="material-symbols-outlined text-xl text-cyan-600 dark:text-primary-fixed-dim">space_dashboard</span><span class="font-body-md text-body-md">Dashboard</span></a><a class="flex items-center gap-3 px-space-md py-2.5 rounded-xl text-slate-600 dark:text-on-surface-variant hover:bg-white/60 dark:hover:bg-surface-container hover:text-slate-900 dark:hover:text-on-surface transition-all" data-path="assessment-wizard" href="#"><span class="material-symbols-outlined text-xl text-cyan-600 dark:text-primary-fixed-dim">auto_awesome</span><span class="font-body-md text-body-md">Assessment Wizard</span></a><a class="flex items-center gap-3 px-space-md py-2.5 rounded-xl text-slate-600 dark:text-on-surface-variant hover:bg-white/60 dark:hover:bg-surface-container hover:text-slate-900 dark:hover:text-on-surface transition-all" data-path="text-nlp" href="#"><span class="material-symbols-outlined text-xl text-cyan-600 dark:text-primary-fixed-dim">neurology</span><span class="font-body-md text-body-md">Text NLP Stream</span></a><a aria-current="page" class="flex items-center gap-3 px-space-md py-2.5 rounded-xl transition-all bg-white dark:bg-surface-container-high text-cyan-700 dark:text-primary font-semibold shadow-sm dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] border border-cyan-500/20 dark:border-transparent" data-path="voice-lab" href="#"><span class="material-symbols-outlined text-xl text-cyan-500 dark:text-primary-fixed-dim">graphic_eq</span><span class="font-body-md text-body-md">Voice Acoustic Lab</span></a><a class="flex items-center gap-3 px-space-md py-2.5 rounded-xl text-slate-600 dark:text-on-surface-variant hover:bg-white/60 dark:hover:bg-surface-container hover:text-slate-900 dark:hover:text-on-surface transition-all" data-path="questionnaire" href="#"><span class="material-symbols-outlined text-xl text-cyan-600 dark:text-primary-fixed-dim">fact_check</span><span class="font-body-md text-body-md">Clinical Questionnaire</span></a><a class="flex items-center gap-3 px-space-md py-2.5 rounded-xl text-slate-600 dark:text-on-surface-variant hover:bg-white/60 dark:hover:bg-surface-container hover:text-slate-900 dark:hover:text-on-surface transition-all" data-path="history" href="#"><span class="material-symbols-outlined text-xl text-cyan-600 dark:text-primary-fixed-dim">insights</span><span class="font-body-md text-body-md">Longitudinal History</span></a><a class="flex items-center gap-3 px-space-md py-2.5 rounded-xl text-slate-600 dark:text-on-surface-variant hover:bg-white/60 dark:hover:bg-surface-container hover:text-slate-900 dark:hover:text-on-surface transition-all" data-path="model-stats" href="#"><span class="material-symbols-outlined text-xl text-cyan-600 dark:text-primary-fixed-dim">precision_manufacturing</span><span class="font-body-md text-body-md">Model Diagnostics</span></a><a class="flex items-center gap-3 px-space-md py-2.5 rounded-xl text-slate-600 dark:text-on-surface-variant hover:bg-white/60 dark:hover:bg-surface-container hover:text-slate-900 dark:hover:text-on-surface transition-all" data-path="home" href="#"><span class="material-symbols-outlined text-xl text-cyan-600 dark:text-primary-fixed-dim">explore</span><span class="font-body-md text-body-md">Overview</span></a><a class="flex items-center gap-3 px-space-md py-2.5 rounded-xl text-slate-600 dark:text-on-surface-variant hover:bg-white/60 dark:hover:bg-surface-container hover:text-slate-900 dark:hover:text-on-surface transition-all" data-path="about" href="#"><span class="material-symbols-outlined text-xl text-cyan-600 dark:text-primary-fixed-dim">info</span><span class="font-body-md text-body-md">About System</span></a></nav><div class="px-space-sm pt-space-sm mt-auto"><div class="p-space-xs rounded-2xl vision-glass-subtle"><a class="group flex flex-col gap-1 p-space-sm rounded-xl bg-rose-500/10 dark:bg-tertiary-container/20 hover:bg-rose-500/20 dark:hover:bg-tertiary-container/30 border border-rose-500/20 dark:border-transparent transition-all" href="tel:988"><div class="flex items-center gap-2"><span class="relative flex h-2.5 w-2.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-500 opacity-75"></span><span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500"></span></span><span class="font-headline-sm text-body-sm font-bold text-rose-700 dark:text-tertiary-fixed-dim tracking-wide">988 Lifeline</span></div><p class="font-label-mono-xs text-label-mono-xs text-slate-600 dark:text-on-surface-variant leading-tight">24/7 Free &amp; Confidential Suicide &amp; Crisis Support</p></a></div></div></aside><div class="pl-64"><main class="relative w-full pt-16 min-h-screen px-space-lg pb-space-xl z-10"><div class="flex flex-col w-full gap-space-xl">
+<!-- Top Telemetry Header Bar -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md p-space-lg rounded-2xl vision-glass relative overflow-hidden">
+<div class="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-purple-500/15 dark:bg-secondary-container/20 blur-3xl pointer-events-none"></div>
+<div class="absolute -left-10 -bottom-10 w-60 h-60 rounded-full bg-cyan-500/15 dark:bg-primary-container/10 blur-3xl pointer-events-none"></div>
+<div class="flex items-center gap-space-md min-w-0 z-10">
+<div class="relative flex items-center justify-center w-14 h-14 rounded-2xl bg-white/80 dark:bg-surface-container-high/90 shadow-md border border-white/80 dark:border-white/10 shrink-0">
+<span class="material-symbols-outlined text-3xl text-cyan-600 dark:text-primary-container">graphic_eq</span>
+<span class="absolute -top-1 -right-1 flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-500 opacity-80"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
+</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-headline-md text-headline-md text-slate-900 dark:text-primary tracking-tight font-bold">Voice Acoustic &amp; Biomarker Lab</span>
+<span class="px-space-sm py-0.5 rounded-full bg-cyan-500/10 text-cyan-700 dark:text-primary-fixed text-label-mono-xs font-label-mono-xs uppercase tracking-widest font-bold border border-cyan-500/20">WAV 16-BIT PCM</span>
+</div>
+<p class="font-body-sm text-body-sm text-slate-600 dark:text-on-surface-variant truncate mt-0.5 font-medium">Deep biometric extraction: Spectral centroid, zero-crossing timbre, acoustic F0 pitch stability and prosodic tension indexing.</p>
+</div>
+</div>
+<!-- Status & Protocol Badge -->
+<div class="flex items-center gap-space-sm shrink-0 z-10">
+<div class="flex flex-col text-right hidden sm:flex">
+<span class="font-label-mono-xs text-label-mono-xs text-cyan-700 dark:text-primary-fixed-dim uppercase tracking-wider font-semibold">Acquisition Engine</span>
+<span class="font-label-mono text-label-mono text-slate-800 dark:text-on-surface font-semibold">44.1 kHz â€¢ RIFF Mono â€¢ 16-bit Signed</span>
+</div>
+<div class="h-8 w-px bg-slate-300 dark:bg-surface-variant hidden sm:block"></div>
+<button class="flex items-center gap-1.5 px-space-md py-2 rounded-full bg-white/80 dark:bg-surface-container hover:bg-white dark:hover:bg-surface-container-highest text-slate-800 dark:text-on-surface transition-all font-label-mono-xs text-label-mono-xs shadow-sm border border-slate-200 dark:border-white/5" id="toggle-pipeline-btn">
+<span class="material-symbols-outlined text-base text-cyan-600 dark:text-primary-container">tune</span>
+<span>Acoustic Calibrated</span>
+</button>
+</div>
+</div>
+<!-- Primary Interactive Grid: VoiceRecorder + Live Telemetry -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg items-start">
+<!-- LEFT 7 COLUMNS: VoiceRecorder Main Glass Console -->
+<div class="xl:col-span-7 flex flex-col gap-space-lg">
+<!-- Studio Recorder Vessel -->
+<div class="p-space-lg rounded-2xl vision-glass flex flex-col gap-space-lg relative overflow-hidden">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="px-space-sm py-1 rounded-full bg-slate-200/80 dark:bg-surface-container-high text-cyan-700 dark:text-primary-fixed-dim font-label-mono-xs text-label-mono-xs flex items-center gap-1.5 font-semibold">
+<span class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>
+              LIVE AUDIO VISUALIZER
+            </span>
+<span class="hidden md:inline font-label-mono-xs text-label-mono-xs text-slate-500 dark:text-outline tracking-wider font-medium">RIFF/WAVE 44-Byte Header Validated</span>
+</div>
+<!-- Ambient Sound dB Meter -->
+<div class="flex items-center gap-2 px-space-md py-1 rounded-full bg-slate-100/90 dark:bg-surface-container-low border border-slate-200/60 dark:border-white/5 shadow-inner">
+<span class="material-symbols-outlined text-sm text-cyan-600 dark:text-primary-fixed-dim">volume_down</span>
+<span class="font-label-mono-xs text-label-mono-xs text-slate-600 dark:text-on-surface-variant font-semibold">LEVEL:</span>
+<span class="font-label-mono text-label-mono text-slate-900 dark:text-primary font-bold" id="live-dbfs">-18.4 dBFS</span>
+</div>
+</div>
+<!-- Oscilloscope Waveform & Canvas Simulation -->
+<div class="relative w-full h-56 rounded-2xl bg-slate-950/95 dark:bg-surface-container-lowest/90 overflow-hidden flex flex-col justify-between p-space-md shadow-2xl border border-white/10">
+<!-- Subtle Grid Lines -->
+<div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:1.5rem_1.5rem] pointer-events-none"></div>
+<!-- Top Frequency Bounds -->
+<div class="flex justify-between items-center z-10 font-label-mono-xs text-label-mono-xs text-slate-400 select-none">
+<span>20 Hz</span>
+<span class="text-cyan-300 bg-slate-800/80 px-2.5 py-0.5 rounded-full border border-cyan-400/20 font-semibold">FFT BINS: 1024 â€¢ WINDOW: HANNING</span>
+<span>22,050 Hz</span>
+</div>
+<!-- Central Animated Frequency Equalizer & Waveform Bars -->
+<div class="relative z-10 w-full h-32 flex items-center justify-between gap-1 px-1" id="waveform-container">
+<!-- Dynamic waveform pillars with luminous gradients -->
+<div class="wave-bar flex-1 bg-gradient-to-t from-cyan-500/40 via-cyan-400 to-white h-6 rounded-full transition-all duration-150"></div>
+<div class="wave-bar flex-1 bg-gradient-to-t from-cyan-500/40 via-cyan-400 to-white h-12 rounded-full transition-all duration-150"></div>
+<div class="wave-bar flex-1 bg-gradient-to-t from-cyan-500/40 via-cyan-400 to-white h-20 rounded-full transition-all duration-150"></div>
+<div class="wave-bar flex-1 bg-gradient-to-t from-cyan-500/40 via-cyan-400 to-white h-28 rounded-full transition-all duration-150"></div>
+<div class="wave-bar flex-1 bg-gradient-to-t from-purple-500/40 via-purple-400 to-pink-300 h-36 rounded-full transition-all duration-150"></div>
+<div class="wave-bar flex-1 bg-gradient-to-t from-purple-500/40 via-purple-400 to-pink-300 h-44 rounded-full transition-all duration-150"></div>
+<div class="wave-bar flex-1 bg-gradient-to-t from-purple-500/40 via-purple-400 to-pink-300 h-30 rounded-full transition-all duration-150"></div>
+<div class="wave-bar flex-1 bg-gradient-to-t from-cyan-500/40 via-cyan-400 to-white h-22 rounded-full transition-all duration-150"></div>
+<div class="wave-bar flex-1 bg-gradient-to-t from-cyan-500/40 via-cyan-400 to-white h-16 rounded-full transition-all duration-150"></div>
+<div class="wave-bar flex-1 bg-gradient-to-t from-cyan-500/40 via-cyan-400 to-white h-32 rounded-full transition-all duration-150"></div>
+<div class="wave-bar flex-1 bg-gradient-to-t from-purple-500/40 via-purple-400 to-pink-300 h-48 rounded-full transition-all duration-150"></div>
+<div class="wave-bar flex-1 bg-gradient-to-t from-purple-500/40 via-purple-400 to-pink-300 h-38 rounded-full transition-all duration-150"></div>
+<div class="wave-bar flex-1 bg-gradient-to-t from-cyan-500/40 via-cyan-400 to-white h-24 rounded-full transition-all duration-150"></div>
+<div class="wave-bar flex-1 bg-gradient-to-t from-cyan-500/40 via-cyan-400 to-white h-14 rounded-full transition-all duration-150"></div>
+<div class="wave-bar flex-1 bg-gradient-to-t from-cyan-500/40 via-cyan-400 to-white h-8 rounded-full transition-all duration-150"></div>
+<div class="wave-bar flex-1 bg-gradient-to-t from-cyan-500/40 via-cyan-400 to-white h-18 rounded-full transition-all duration-150"></div>
+<div class="wave-bar flex-1 bg-gradient-to-t from-purple-500/40 via-purple-400 to-pink-300 h-26 rounded-full transition-all duration-150"></div>
+<div class="wave-bar flex-1 bg-gradient-to-t from-purple-500/40 via-purple-400 to-pink-300 h-34 rounded-full transition-all duration-150"></div>
+<div class="wave-bar flex-1 bg-gradient-to-t from-cyan-500/40 via-cyan-400 to-white h-18 rounded-full transition-all duration-150"></div>
+<div class="wave-bar flex-1 bg-gradient-to-t from-cyan-500/40 via-cyan-400 to-white h-10 rounded-full transition-all duration-150"></div>
+<div class="wave-bar flex-1 bg-gradient-to-t from-cyan-500/40 via-cyan-400 to-white h-6 rounded-full transition-all duration-150"></div>
+</div>
+<!-- Bottom Time & Peak Meter -->
+<div class="flex justify-between items-center z-10">
+<span class="font-label-mono-xs text-label-mono-xs text-cyan-300 font-semibold">RMS: 0.048 | Dynamic Headroom +14.2dB</span>
+<span class="font-label-mono-xs text-label-mono-xs text-slate-400">PEAK -4.1 dB @ 412Hz</span>
+</div>
+</div>
+<!-- Custom Glowing Seekbar & Playback Timeline -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between font-label-mono-xs text-label-mono-xs text-slate-500 dark:text-on-surface-variant font-medium">
+<span class="text-cyan-600 dark:text-primary-fixed font-label-mono font-bold" id="current-seek-time">00:08.4</span>
+<span class="uppercase tracking-wider">Uncompressed Stream Buffer</span>
+<span class="font-label-mono font-bold">00:14.2</span>
+</div>
+<!-- Seekbar slider track -->
+<div class="relative w-full h-3 rounded-full bg-slate-200/90 dark:bg-surface-container-high cursor-pointer shadow-inner overflow-hidden group" id="audio-seek-track">
+<div class="absolute top-0 left-0 h-full w-[59%] bg-gradient-to-r from-purple-500 via-teal-400 to-cyan-400 rounded-full shadow-[0_0_12px_rgba(0,245,255,0.6)]" id="audio-seek-progress"></div>
+<div class="absolute top-1/2 left-[59%] -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-white shadow-[0_0_10px_#00f5ff] group-hover:scale-125 transition-transform pointer-events-none"></div>
+</div>
+</div>
+<!-- Recorder Primary Controls and Actions -->
+<div class="flex flex-wrap items-center justify-between gap-space-md pt-space-xs">
+<div class="flex items-center gap-space-sm">
+<!-- Glowing Record Button -->
+<button class="flex items-center gap-space-sm px-space-lg py-3 rounded-full bg-gradient-to-r from-cyan-500 to-teal-400 dark:from-primary-container dark:to-surface-tint text-slate-950 dark:text-on-primary font-headline-sm text-body-md font-bold shadow-[0_0_24px_rgba(0,245,255,0.45)] hover:shadow-[0_0_36px_rgba(0,245,255,0.7)] hover:-translate-y-0.5 active:translate-y-0 transition-all" id="record-toggle-btn">
+<span class="material-symbols-outlined text-2xl animate-pulse" id="record-icon">mic</span>
+<span id="record-label">Voice Recording Active</span>
+</button>
+<!-- Stop & Extract Features Button -->
+<button class="flex items-center gap-2 px-space-md py-3 rounded-full bg-white/90 dark:bg-surface-container-high hover:bg-white dark:hover:bg-surface-bright text-slate-800 dark:text-on-surface transition-all font-body-md text-body-md shadow-md border border-slate-200 dark:border-white/10 font-semibold" id="extract-features-btn">
+<span class="material-symbols-outlined text-xl text-purple-600 dark:text-secondary-fixed">auto_graph</span>
+<span>Stop &amp; Extract Features</span>
+</button>
+</div>
+<div class="flex items-center gap-2">
+<!-- Recording Timer display -->
+<div class="flex items-center gap-1.5 px-space-md py-2 rounded-full bg-slate-900/90 dark:bg-surface-container-lowest/80 text-white shadow-inner border border-white/10">
+<span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+<span class="font-data-metric-md text-headline-sm text-cyan-300 dark:text-primary font-bold tracking-tight" id="timer-display">00:14.2</span>
+</div>
+<!-- Re-record Reset Button -->
+<button class="p-2.5 rounded-full bg-white/90 dark:bg-surface-container-high hover:bg-slate-100 dark:hover:bg-surface-bright text-slate-600 dark:text-on-surface-variant hover:text-rose-500 transition-all shadow-md border border-slate-200 dark:border-white/10" id="reset-recording-btn" title="Re-record / Clear Buffer">
+<span class="material-symbols-outlined text-xl">restart_alt</span>
+</button>
+</div>
+</div>
+<!-- Alternate Drag & Drop Audio Upload Zone -->
+<div class="relative group p-space-md rounded-2xl vision-glass-subtle hover:bg-white/90 dark:hover:bg-surface-container-low/80 transition-all cursor-pointer flex flex-col md:flex-row items-center justify-between gap-space-md" id="drop-zone">
+<input accept=".wav,.mp3,.m4a" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10" id="audio-file-input" type="file"/>
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-full bg-cyan-500/10 dark:bg-surface-container-high flex items-center justify-center text-cyan-600 dark:text-primary-container group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-xl">cloud_upload</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-slate-900 dark:text-primary font-semibold">Or drop sample vocal recording</span>
+<span class="font-label-mono-xs text-label-mono-xs text-slate-500 dark:text-on-surface-variant">Lossless .WAV preferred (16-bit PCM, 44.1/48kHz), .MP3, .M4A accepted up to 50MB</span>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full bg-white dark:bg-surface-container-high text-cyan-700 dark:text-primary-fixed-dim font-label-mono-xs text-label-mono-xs group-hover:bg-cyan-500 group-hover:text-white transition-all shadow-sm font-semibold">Select Audio File</span>
+</div>
+</div>
+<!-- Feature Telemetry Radar & Deep Acoustic Metrics -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- Pitch Card (F0) -->
+<div class="p-space-lg rounded-2xl vision-glass flex flex-col justify-between relative overflow-hidden">
+<div class="flex justify-between items-start mb-2">
+<div>
+<span class="font-label-mono-xs text-label-mono-xs text-slate-500 dark:text-outline uppercase tracking-wider font-semibold">Acoustic Pitch</span>
+<h4 class="font-headline-sm text-headline-sm text-slate-900 dark:text-primary font-bold">Fundamental (F0)</h4>
+</div>
+<span class="px-space-xs py-1 rounded-full bg-cyan-500/10 text-cyan-700 dark:text-primary-container font-label-mono-xs text-label-mono-xs flex items-center gap-1 font-semibold border border-cyan-500/20">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
+              94.2% Stability
+            </span>
+</div>
+<div class="flex items-baseline gap-2 my-space-xs">
+<span class="font-data-metric-lg text-data-metric-lg text-slate-900 dark:text-primary tracking-tight font-extrabold">142.6</span>
+<span class="font-label-mono text-label-mono text-cyan-700 dark:text-primary-fixed-dim font-bold">Hz</span>
+</div>
+<div class="space-y-1.5">
+<div class="flex justify-between font-label-mono-xs text-label-mono-xs text-slate-600 dark:text-on-surface-variant font-medium">
+<span>Normative Adult Pitch (85 - 255 Hz)</span>
+<span class="text-cyan-700 dark:text-primary-fixed font-bold">142.6 Hz (E2-C4 Band)</span>
+</div>
+<!-- Range indicator bar -->
+<div class="w-full h-2 rounded-full bg-slate-200 dark:bg-surface-container-highest overflow-hidden relative">
+<div class="absolute left-[33%] w-[42%] h-full bg-slate-300 dark:bg-surface-bright rounded-full"></div>
+<div class="absolute left-[39%] top-0 h-full w-2 bg-cyan-500 dark:bg-primary-container rounded-full shadow-[0_0_8px_#00f5ff]"></div>
+</div>
+<div class="flex justify-between font-label-mono-xs text-label-mono-xs text-slate-400 dark:text-outline pt-0.5">
+<span>85 Hz (Low Masculine)</span>
+<span>255 Hz (High Feminine)</span>
+</div>
+</div>
+</div>
+<!-- RMS Energy & Vocal Strain -->
+<div class="p-space-lg rounded-2xl vision-glass flex flex-col justify-between relative overflow-hidden">
+<div class="flex justify-between items-start mb-2">
+<div>
+<span class="font-label-mono-xs text-label-mono-xs text-slate-500 dark:text-outline uppercase tracking-wider font-semibold">Prosodic Energy</span>
+<h4 class="font-headline-sm text-headline-sm text-slate-900 dark:text-primary font-bold">RMS Vocal Energy</h4>
+</div>
+<span class="px-space-xs py-1 rounded-full bg-purple-500/10 text-purple-700 dark:text-secondary font-label-mono-xs text-label-mono-xs font-semibold border border-purple-500/20">
+              Strain: Nominal Low
+            </span>
+</div>
+<div class="flex items-baseline gap-2 my-space-xs">
+<span class="font-data-metric-lg text-data-metric-lg text-slate-900 dark:text-primary tracking-tight font-extrabold">0.048</span>
+<span class="font-label-mono text-label-mono text-purple-700 dark:text-secondary-fixed font-bold">-26.4 dB</span>
+</div>
+<!-- Micro Sparkline SVG -->
+<div class="w-full h-10 flex items-end">
+<svg class="w-full h-full text-purple-600 dark:text-secondary-container overflow-visible" preserveaspectratio="none" viewbox="0 0 100 24">
+<path d="M0 18 Q 10 12, 20 16 T 40 8 T 60 14 T 80 4 T 100 12 L 100 24 L 0 24 Z" fill="currentColor" fill-opacity="0.18"></path>
+<path d="M0 18 Q 10 12, 20 16 T 40 8 T 60 14 T 80 4 T 100 12" fill="none" stroke="currentColor" stroke-width="2.5"></path>
+</svg>
+</div>
+<span class="font-label-mono-xs text-label-mono-xs text-slate-500 dark:text-on-surface-variant mt-1 font-medium">Energy Variance: Â±0.006 RMS (Even vocal modulation)</span>
+</div>
+<!-- Zero Crossing Rate (ZCR) -->
+<div class="p-space-lg rounded-2xl vision-glass flex flex-col justify-between">
+<div class="flex justify-between items-start mb-1">
+<span class="font-label-mono-xs text-label-mono-xs text-slate-500 dark:text-outline uppercase tracking-wider font-semibold">Fricative &amp; Treble Rate</span>
+<span class="font-label-mono-xs text-label-mono-xs text-cyan-700 dark:text-primary-fixed-dim font-bold">Normal articulation</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-slate-900 dark:text-primary font-bold">Zero Crossing (ZCR)</h4>
+<div class="flex items-baseline gap-2 my-2">
+<span class="font-data-metric-md text-data-metric-md text-slate-900 dark:text-primary font-extrabold">0.082</span>
+<span class="font-label-mono-xs text-label-mono-xs text-slate-500 dark:text-on-surface-variant font-medium">crossings / frame</span>
+</div>
+<p class="font-body-sm text-body-sm text-slate-600 dark:text-on-surface-variant leading-relaxed font-medium">Reflects vocal clarity and high-frequency phonemic transitions. No psychomotor retardation detected.</p>
+</div>
+<!-- Spectral Rolloff & Centroid -->
+<div class="p-space-lg rounded-2xl vision-glass flex flex-col justify-between">
+<div class="flex justify-between items-start mb-1">
+<span class="font-label-mono-xs text-label-mono-xs text-slate-500 dark:text-outline uppercase tracking-wider font-semibold">Frequency Envelope</span>
+<span class="font-label-mono-xs text-label-mono-xs text-cyan-700 dark:text-primary-fixed font-bold">Timbre: Crisp</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-slate-900 dark:text-primary font-bold">Centroid &amp; Rolloff</h4>
+<div class="grid grid-cols-2 gap-2 my-2">
+<div>
+<span class="font-label-mono-xs text-label-mono-xs text-slate-500 dark:text-outline">Centroid:</span>
+<div class="font-headline-sm text-headline-sm text-slate-900 dark:text-primary font-extrabold">1,840 <span class="font-label-mono-xs text-label-mono-xs font-normal text-slate-500">Hz</span></div>
+</div>
+<div>
+<span class="font-label-mono-xs text-label-mono-xs text-slate-500 dark:text-outline">85% Rolloff:</span>
+<div class="font-headline-sm text-headline-sm text-purple-700 dark:text-secondary font-extrabold">3,420 <span class="font-label-mono-xs text-label-mono-xs font-normal text-slate-500">Hz</span></div>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-slate-600 dark:text-on-surface-variant leading-relaxed font-medium">Distribution indicates balanced acoustic brightness with no muffled dysphonia.</p>
+</div>
+</div>
+</div>
+<!-- RIGHT 5 COLUMNS: Emotion Prediction, Vocal Stress Index & Radar Analysis -->
+<div class="xl:col-span-5 flex flex-col gap-space-lg">
+<!-- Continuous Voice Stress Gauge (Score: 38/100) -->
+<div class="p-space-lg rounded-2xl vision-glass flex flex-col gap-space-md relative overflow-hidden">
+<div class="flex items-center justify-between">
+<div>
+<span class="font-label-mono-xs text-label-mono-xs text-slate-500 dark:text-outline uppercase tracking-wider font-semibold">Prosodic Neuro-Biomarker</span>
+<h3 class="font-headline-md text-headline-md text-slate-900 dark:text-primary font-bold">Voice Stress Index</h3>
+</div>
+<span class="px-space-sm py-1 rounded-full bg-cyan-500/10 text-cyan-700 dark:text-primary-container font-label-mono-xs text-label-mono-xs font-bold border border-cyan-500/20">Mild Tension</span>
+</div>
+<!-- Radial Gauge Visualizer -->
+<div class="flex items-center justify-center my-space-sm relative">
+<svg class="w-48 h-48 transform -rotate-90" viewbox="0 0 120 120">
+<!-- Background circle -->
+<circle class="text-slate-200 dark:text-white/10" cx="60" cy="60" fill="transparent" r="50" stroke="currentColor" stroke-linecap="round" stroke-width="9"></circle>
+<!-- Progress arc (38%) -> circumference = 2 * PI * 50 = 314.15; 38% = 119.38; offset = 314.15 - 119.38 = 194.77 -->
+<circle class="transition-all duration-1000" cx="60" cy="60" fill="transparent" id="stress-gauge-circle" r="50" stroke="url(#stressGrad)" stroke-dasharray="314.15" stroke-dashoffset="194.77" stroke-linecap="round" stroke-width="9"></circle>
+<defs>
+<lineargradient id="stressGrad" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#06b6d4"></stop>
+<stop offset="70%" stop-color="#9333ea"></stop>
+<stop offset="100%" stop-color="#f43f5e"></stop>
+</lineargradient>
+</defs>
+</svg>
+<div class="absolute flex flex-col items-center justify-center text-center">
+<span class="font-data-metric-lg text-data-metric-lg text-slate-900 dark:text-primary tracking-tight font-extrabold">38</span>
+<span class="font-label-mono-xs text-label-mono-xs text-slate-500 dark:text-on-surface-variant uppercase tracking-widest mt-0.5 font-semibold">/ 100 Stress</span>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-2 p-space-sm rounded-xl vision-glass-subtle text-center font-label-mono-xs text-label-mono-xs">
+<div>
+<div class="text-slate-500 dark:text-outline font-medium">BASELINE</div>
+<div class="text-cyan-700 dark:text-primary-fixed mt-0.5 font-bold">29.1</div>
+</div>
+<div>
+<div class="text-slate-500 dark:text-outline font-medium">DEV DELTA</div>
+<div class="text-purple-700 dark:text-secondary mt-0.5 font-bold">+8.9 pts</div>
+</div>
+<div>
+<div class="text-slate-500 dark:text-outline font-medium">CONFIDENCE</div>
+<div class="text-cyan-600 dark:text-primary-container mt-0.5 font-bold">96.4%</div>
+</div>
+</div>
+</div>
+<!-- Emotion Prediction Model Results (Soft-Voting Class Probabilities) -->
+<div class="p-space-lg rounded-2xl vision-glass flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div>
+<span class="font-label-mono-xs text-label-mono-xs text-slate-500 dark:text-outline uppercase tracking-wider font-semibold">Acoustic Inferred State</span>
+<h3 class="font-headline-md text-headline-md text-slate-900 dark:text-primary font-bold">Emotion Probabilities</h3>
+</div>
+<span class="font-label-mono-xs text-label-mono-xs text-slate-500 dark:text-on-surface-variant font-medium">Softmax Ensemble v2</span>
+</div>
+<!-- Highlighted Predominant Emotion -->
+<div class="p-space-md rounded-2xl vision-glass-subtle flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-purple-500/15 dark:bg-secondary-container/40 flex items-center justify-center text-purple-700 dark:text-secondary">
+<span class="material-symbols-outlined text-2xl">sentiment_neutral</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-lg text-slate-900 dark:text-primary font-bold">Fatigued / Somber</span>
+<span class="font-label-mono-xs text-label-mono-xs text-slate-500 dark:text-on-surface-variant font-medium">Primary Classifier Marker</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-data-metric-md text-headline-sm text-purple-700 dark:text-secondary font-extrabold">62%</span>
+<span class="font-label-mono-xs text-label-mono-xs text-slate-500 dark:text-outline">Confidence</span>
+</div>
+</div>
+<!-- Secondary Marker Badge -->
+<div class="flex items-center justify-between px-space-md py-2 rounded-xl bg-slate-200/50 dark:bg-surface-container-high/40 text-slate-700 dark:text-on-surface-variant font-label-mono-xs text-label-mono-xs font-semibold">
+<span>Secondary Marker: Restrained Neutral</span>
+<span class="text-cyan-700 dark:text-primary-fixed-dim font-bold">28% Probability</span>
+</div>
+<!-- Class Distribution Progress Bars -->
+<div class="space-y-space-sm pt-space-xs">
+<!-- Somber / Fatigued -->
+<div class="space-y-1">
+<div class="flex justify-between font-label-mono-xs text-label-mono-xs font-medium">
+<span class="text-slate-800 dark:text-primary">Somber / Depressive Flatness</span>
+<span class="text-purple-700 dark:text-secondary font-bold">62%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-slate-200 dark:bg-surface-container-high overflow-hidden">
+<div class="h-full bg-gradient-to-r from-purple-600 to-indigo-400 rounded-full w-[62%]"></div>
+</div>
+</div>
+<!-- Neutral -->
+<div class="space-y-1">
+<div class="flex justify-between font-label-mono-xs text-label-mono-xs font-medium">
+<span class="text-slate-800 dark:text-primary">Neutral / Equanimous</span>
+<span class="text-cyan-700 dark:text-primary-fixed font-bold">28%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-slate-200 dark:bg-surface-container-high overflow-hidden">
+<div class="h-full bg-gradient-to-r from-cyan-500 to-teal-400 rounded-full w-[28%]"></div>
+</div>
+</div>
+<!-- Vocal Tension / Anxiety -->
+<div class="space-y-1">
+<div class="flex justify-between font-label-mono-xs text-label-mono-xs font-medium">
+<span class="text-slate-800 dark:text-primary">Vocal Tension / Anxiety Tremor</span>
+<span class="text-rose-600 dark:text-tertiary-fixed-dim font-bold">14%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-slate-200 dark:bg-surface-container-high overflow-hidden">
+<div class="h-full bg-gradient-to-r from-purple-500 to-rose-500 rounded-full w-[14%]"></div>
+</div>
+</div>
+<!-- Joy / Positive Resonance -->
+<div class="space-y-1">
+<div class="flex justify-between font-label-mono-xs text-label-mono-xs font-medium">
+<span class="text-slate-800 dark:text-primary">Joy / High Valence Resonancy</span>
+<span class="text-slate-400 dark:text-outline font-bold">4%</span>
+</div>
+<div class="w-full h-2 rounded-full bg-slate-200 dark:bg-surface-container-high overflow-hidden">
+<div class="h-full bg-slate-400 dark:bg-surface-bright rounded-full w-[4%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Hexagonal / Acoustic Feature Radar Graphic Card -->
+<div class="p-space-lg rounded-2xl vision-glass flex flex-col gap-space-md relative overflow-hidden">
+<div class="flex items-center justify-between">
+<span class="font-label-mono-xs text-label-mono-xs text-slate-500 dark:text-outline uppercase tracking-wider font-semibold">Multidimensional Prosody</span>
+<span class="font-label-mono-xs text-label-mono-xs text-cyan-700 dark:text-primary-container font-bold">FFT 5-Axis Radar</span>
+</div>
+<div class="flex items-center justify-center py-2 relative">
+<!-- Geometric Hexagon Biometric Radar Vector -->
+<svg class="w-52 h-52 text-cyan-500" viewbox="0 0 200 200">
+<!-- Background Hexagon Guides -->
+<polygon class="stroke-slate-300 dark:stroke-white/10" fill="none" points="100,10 180,55 180,145 100,190 20,145 20,55" stroke-width="1.5"></polygon>
+<polygon class="stroke-slate-200 dark:stroke-white/5" fill="none" points="100,35 155,67 155,133 100,165 45,133 45,67" stroke-width="1"></polygon>
+<polygon class="stroke-slate-200 dark:stroke-white/5" fill="none" points="100,60 130,78 130,122 100,140 70,122 70,78" stroke-width="1"></polygon>
+<!-- Axis Rays -->
+<line class="stroke-slate-300 dark:stroke-white/10" stroke-width="1" x1="100" x2="100" y1="100" y2="10"></line>
+<line class="stroke-slate-300 dark:stroke-white/10" stroke-width="1" x1="100" x2="180" y1="100" y2="55"></line>
+<line class="stroke-slate-300 dark:stroke-white/10" stroke-width="1" x1="100" x2="180" y1="100" y2="145"></line>
+<line class="stroke-slate-300 dark:stroke-white/10" stroke-width="1" x1="100" x2="100" y1="100" y2="190"></line>
+<line class="stroke-slate-300 dark:stroke-white/10" stroke-width="1" x1="100" x2="20" y1="100" y2="145"></line>
+<line class="stroke-slate-300 dark:stroke-white/10" stroke-width="1" x1="100" x2="20" y1="100" y2="55"></line>
+<!-- Active Telemetry Contour -->
+<polygon class="shadow-lg" fill="rgba(6, 182, 212, 0.2)" points="100,28 162,70 148,138 100,154 36,128 42,66" stroke="#06b6d4" stroke-width="2.5"></polygon>
+<!-- Metric Anchor Nodes -->
+<circle class="shadow-[0_0_8px_#06b6d4]" cx="100" cy="28" fill="#06b6d4" r="4.5"></circle>
+<circle cx="162" cy="70" fill="#a855f7" r="4.5"></circle>
+<circle cx="148" cy="138" fill="#06b6d4" r="4.5"></circle>
+<circle cx="100" cy="154" fill="#a855f7" r="4.5"></circle>
+<circle cx="36" cy="128" fill="#06b6d4" r="4.5"></circle>
+<circle cx="42" cy="66" fill="#a855f7" r="4.5"></circle>
+<!-- Center Acoustic Core Dot -->
+<circle class="animate-pulse shadow-[0_0_12px_#f43f5e]" cx="100" cy="100" fill="#f43f5e" r="6"></circle>
+</svg>
+</div>
+<div class="grid grid-cols-2 gap-x-4 gap-y-1 font-label-mono-xs text-label-mono-xs text-slate-600 dark:text-on-surface-variant pt-space-xs font-medium">
+<div class="flex justify-between">
+<span class="text-slate-500 dark:text-outline">Pitch Stability:</span>
+<span class="text-cyan-700 dark:text-primary-fixed font-bold">94.2%</span>
+</div>
+<div class="flex justify-between">
+<span class="text-slate-500 dark:text-outline">Harmonics (HNR):</span>
+<span class="text-purple-700 dark:text-secondary font-bold">21.8 dB</span>
+</div>
+<div class="flex justify-between">
+<span class="text-slate-500 dark:text-outline">Jitter (Local):</span>
+<span class="text-cyan-700 dark:text-primary-fixed font-bold">0.42%</span>
+</div>
+<div class="flex justify-between">
+<span class="text-slate-500 dark:text-outline">Shimmer (Local):</span>
+<span class="text-purple-700 dark:text-secondary font-bold">2.14%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 4 Bottom: Real-Time Diagnostic Feed & Acoustic Export Action -->
+<div class="p-space-lg rounded-2xl vision-glass flex flex-col md:flex-row items-center justify-between gap-space-lg">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-12 h-12 rounded-2xl bg-cyan-500/10 dark:bg-surface-container-highest flex items-center justify-center text-cyan-600 dark:text-primary-container shrink-0 border border-cyan-500/20">
+<span class="material-symbols-outlined text-2xl">download_for_offline</span>
+</div>
+<div class="flex flex-col min-w-0">
+<h4 class="font-headline-sm text-body-lg text-slate-900 dark:text-primary font-bold">Clinical Feature Vector Export Ready</h4>
+<p class="font-body-sm text-body-sm text-slate-600 dark:text-on-surface-variant truncate font-medium">Session ID #MG-VOX-88219 â€¢ 38 extracted prosodic parameters ready for cross-modal transformer fusion.</p>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0 w-full md:w-auto">
+<button class="flex-1 md:flex-initial flex items-center justify-center gap-2 px-space-md py-2.5 rounded-full bg-white dark:bg-surface-container hover:bg-slate-100 dark:hover:bg-surface-container-high text-slate-800 dark:text-on-surface font-label-mono-xs text-label-mono-xs transition-all shadow-sm border border-slate-200 dark:border-white/10 font-bold" id="export-json-btn">
+<span class="material-symbols-outlined text-base text-cyan-600 dark:text-primary-fixed-dim">data_object</span>
+<span>Export Vectors (.JSON)</span>
+</button>
+<button class="flex-1 md:flex-initial flex items-center justify-center gap-2 px-space-lg py-2.5 rounded-full bg-gradient-to-r from-cyan-500 to-teal-400 dark:from-primary-container dark:to-surface-tint text-slate-950 dark:text-on-primary font-headline-sm text-body-sm font-bold shadow-[0_0_20px_rgba(0,245,255,0.35)] hover:shadow-[0_0_30px_rgba(0,245,255,0.6)] transition-all" id="transfer-fusion-btn">
+<span class="material-symbols-outlined text-base">forward</span>
+<span>Send to Multimodal Fusion</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+  (function initVoiceLab() {
+    let isRecording = true;
+    let timerInterval = null;
+    let elapsedSeconds = 14.2;
+
+    const recordToggleBtn = document.getElementById('record-toggle-btn');
+    const recordLabel = document.getElementById('record-label');
+    const recordIcon = document.getElementById('record-icon');
+    const timerDisplay = document.getElementById('timer-display');
+    const resetRecordingBtn = document.getElementById('reset-recording-btn');
+    const extractBtn = document.getElementById('extract-features-btn');
+    const liveDbfs = document.getElementById('live-dbfs');
+    const seekTrack = document.getElementById('audio-seek-track');
+    const seekProgress = document.getElementById('audio-seek-progress');
+    const currentSeekTime = document.getElementById('current-seek-time');
+    const waveBars = document.querySelectorAll('.wave-bar');
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+
+    // Theme Toggle Functionality
+    if (themeToggleBtn) {
+      themeToggleBtn.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      });
+
+      // Maintain persisted preference
+      if (localStorage.getItem('theme') === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+    }
+
+    // Dynamic wave bar animation
+    function animateWaveform() {
+      if (!isRecording) return;
+      waveBars.forEach(bar => {
+        const randomHeight = Math.floor(Math.random() * 52) + 8;
+        bar.style.height = randomHeight + 'px';
+      });
+      // Slight fluctuation on dB meter
+      const randomDb = (-17 - Math.random() * 3).toFixed(1);
+      if (liveDbfs) liveDbfs.textContent = randomDb + ' dBFS';
+    }
+
+    const waveInterval = setInterval(animateWaveform, 120);
+
+    // Timer simulation
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        elapsedSeconds += 0.1;
+        const mins = String(Math.floor(elapsedSeconds / 60)).padStart(2, '0');
+        const secs = (elapsedSeconds % 60).toFixed(1).padStart(4, '0');
+        if (timerDisplay) timerDisplay.textContent = `${mins}:${secs}`;
+      }, 100);
+    }
+    startTimer();
+
+    // Toggle recording button
+    if (recordToggleBtn) {
+      recordToggleBtn.addEventListener('click', () => {
+        isRecording = !isRecording;
+        if (isRecording) {
+          recordLabel.textContent = 'Voice Recording Active';
+          recordIcon.textContent = 'mic';
+          recordIcon.classList.add('animate-pulse');
+          recordToggleBtn.classList.remove('opacity-75');
+          startTimer();
+        } else {
+          recordLabel.textContent = 'Recording Paused';
+          recordIcon.textContent = 'pause';
+          recordIcon.classList.remove('animate-pulse');
+          recordToggleBtn.classList.add('opacity-75');
+          clearInterval(timerInterval);
+        }
+      });
+    }
+
+    // Reset recording button
+    if (resetRecordingBtn) {
+      resetRecordingBtn.addEventListener('click', () => {
+        elapsedSeconds = 0;
+        if (timerDisplay) timerDisplay.textContent = '00:00.0';
+        if (currentSeekTime) currentSeekTime.textContent = '00:00.0';
+        if (seekProgress) seekProgress.style.width = '0%';
+      });
+    }
+
+    // Interactive seekbar click
+    if (seekTrack && seekProgress && currentSeekTime) {
+      seekTrack.addEventListener('click', (e) => {
+        const rect = seekTrack.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const percentage = Math.max(0, Math.min(100, (clickX / rect.width) * 100));
+        seekProgress.style.width = percentage + '%';
+        const currentSecs = ((percentage / 100) * 14.2).toFixed(1);
+        currentSeekTime.textContent = '00:' + String(currentSecs).padStart(4, '0');
+      });
+    }
+
+    // Extract features mock toast
+    if (extractBtn) {
+      extractBtn.addEventListener('click', () => {
+        extractBtn.innerHTML = '<span class="material-symbols-outlined text-base animate-spin">refresh</span><span>Processing PCM...</span>';
+        setTimeout(() => {
+          extractBtn.innerHTML = '<span class="material-symbols-outlined text-base text-cyan-500">check_circle</span><span>Extracted & Validated</span>';
+          setTimeout(() => {
+            extractBtn.innerHTML = '<span class="material-symbols-outlined text-xl text-purple-600 dark:text-secondary-fixed">auto_graph</span><span>Stop &amp; Extract Features</span>';
+          }, 2000);
+        }, 800);
+      });
+    }
+
+    // Multimodal transfer action
+    const transferBtn = document.getElementById('transfer-fusion-btn');
+    if (transferBtn) {
+      transferBtn.addEventListener('click', () => {
+        transferBtn.innerHTML = '<span class="material-symbols-outlined text-base">check</span><span>Stream Dispatched</span>';
+        setTimeout(() => {
+          transferBtn.innerHTML = '<span class="material-symbols-outlined text-base">forward</span><span>Send to Multimodal Fusion</span>';
+        }, 1800);
+      });
+    }
+  })();
+</script></main></div><script src="/new-design/integration.js"></script></body></html>ecordedBlob = file;
+      document.getElementById('audio-file-status').textContent = `File Loaded: ${file.name}`;
+      await runVoiceAnalysis(file);
+    }
+
+    function sendToMultimodalAssessment() {
+      if (lastVoiceResult) {
+        sessionStorage.setItem('mindguard_staged_voice', JSON.stringify(lastVoiceResult));
+      }
+      showToast("Staging voice biomarkers and redirecting to Assessment Wizard...", "info");
+      setTimeout(() => {
+        window.location.href = '/assessment.html';
+      }, 500);
+    }
+  </script>
+</body>
+</html>
